@@ -1,4 +1,11 @@
 <resources>
 	<string name="app_name">LibrarySliteDataBaseUnidadePMAM</string>
+	<string name="syncTitle">Atualização de dados</string>
+	<string name="aguarde_sync">As atualizações e o processo levará apenas 1 minuto, mas você não conseguirá usar o aplicativo enquanto atualiza.\n Quer fazer isso agora? </string>
 
+	<string name="aguarde_sync2">O processo de atualização levará cerca de 10 minutos.\n Você não conseguirá usar o aplicativo até o final do processo.\n Quer fazer isso agora? </string>
+	<string name="btn_nao">Não</string>
+	<string name="btn_sim">Sim</string>
+	<string name="btn_enviar">Enviar</string>
+	<string name="btn_ok">Ok</string>
 </resources>

@@ -56,6 +56,12 @@ public class updateUnidadesPMAM {
 			}
 		}
 	};
+
+	private String eIternet = "Erro, Verifique sua conexão com a internet";
+	private String eTimeOutException = "Tempo limite excedido. Verifique sua conexão com a internet";
+	private String eJsonParseException = "Erro Json. dados inválidos";
+	private String eDesconhecido = "Desculpe, algo deu errado. Tente novamente mais tarde";
+
 	private ArrayList<ObjJsonPessoaFuncao> listPS;
 
 	private updateUnidadesPMAM(Context context, String name) {
@@ -113,15 +119,15 @@ public class updateUnidadesPMAM {
 						}
 						startSyncLotacoes(QTDOPM);
 					} else if (e.toString().contains("JsonParseException")) {
-						r.setResult(context.getString(R.string.error_JsonParseException));
+						r.setResult(eJsonParseException);
 
 					} else if (e.toString().contains("TimeoutException")) {
-						r.setResult(context.getString(R.string.error_TimeoutException));
+						r.setResult(eTimeOutException);
 					} else {
 						if (e.toString().length() > 2) {
 							r.setResult(e.toString());
 						} else {
-							r.setResult(context.getString(R.string.error_desconhecido));
+							r.setResult(eDesconhecido);
 						}
 
 					}
@@ -129,7 +135,7 @@ public class updateUnidadesPMAM {
 				}
 			});
 		} else {
-			r.setResult(context.getString(R.string.error_internet_sv));
+			r.setResult(eIternet);
 		}
 	}
 
@@ -271,17 +277,17 @@ public class updateUnidadesPMAM {
 								}
 								hl.sendEmptyMessage(0);
 							} else if (e.toString().contains("JsonParseException")) {
-								retorno += "\n " + context.getString(R.string.error_JsonParseException);
+								retorno += "\n " + eJsonParseException;
 								hl.sendEmptyMessage(2);
 							} else if (e.toString().contains("TimeoutException")) {
 
-								retorno += "\n " + context.getString(R.string.error_TimeoutException);
+								retorno += "\n " + eTimeOutException;
 								hl.sendEmptyMessage(2);
 							} else {
 								if (e.toString().length() > 2) {
 									retorno += "\n " + e.toString();
 								} else {
-									retorno += "\n " + context.getString(R.string.error_desconhecido);
+									retorno += "\n " + eDesconhecido;
 
 								}
 
