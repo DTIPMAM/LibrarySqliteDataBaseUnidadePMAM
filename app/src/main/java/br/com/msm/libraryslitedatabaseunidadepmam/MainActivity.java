@@ -3,12 +3,17 @@ package br.com.msm.libraryslitedatabaseunidadepmam;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.database.Cursor;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 
+import br.com.msm.librarydatabaseunidadepmam.classes_dao.lotacoesDAO;
 import br.com.msm.librarydatabaseunidadepmam.interfaces.resultUpdate;
 import br.com.msm.librarydatabaseunidadepmam.updateUnidadesPMAM;
 
@@ -27,6 +32,22 @@ public class MainActivity extends AppCompatActivity {
 		if(isAtualizarDados(this)){
 			starAlertInforAtualizar();
 		}
+
+
+		Button btn = findViewById(R.id.btn_start);
+
+		lotacoesDAO dao = new lotacoesDAO(getApplication());
+		Cursor cr = dao.buscarTudo();
+		btn.setText("Total de lotações " + cr.getCount());
+		cr.close();
+
+
+		findViewById(R.id.btn_start).setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				starAlertInforAtualizar();
+			}
+		});
 	}
 
 
@@ -45,6 +66,9 @@ public class MainActivity extends AppCompatActivity {
 						updateUnidadesPMAM.with(MainActivity.this).start(new resultUpdate() {
 							@Override
 							public void setResult(String result) {
+
+
+								Log.d("MainActivity ", result);
 								Toast.makeText(MainActivity.this, result, Toast.LENGTH_SHORT).show();
 							}
 						});
