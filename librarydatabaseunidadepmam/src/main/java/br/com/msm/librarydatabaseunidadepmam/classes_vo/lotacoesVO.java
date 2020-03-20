@@ -221,6 +221,27 @@ public class lotacoesVO implements Parcelable {
     }
 
     @Override
+    public String toString() {
+        return "lotacoesVO{" +
+                "ID=" + ID +
+                ", id_categoria=" + id_categoria +
+                ", cod_parent=" + cod_parent +
+                ", nomeLotacaoSuperior='" + nomeLotacaoSuperior + '\'' +
+                ", nome='" + nome + '\'' +
+                ", sigla='" + sigla + '\'' +
+                ", endereco='" + endereco + '\'' +
+                ", email='" + email + '\'' +
+                ", tel='" + tel + '\'' +
+                ", telSA='" + telSA + '\'' +
+                ", detalhes='" + detalhes + '\'' +
+                ", lng=" + lng +
+                ", lat=" + lat +
+                ", nro_radio=" + nro_radio +
+                ", distancia='" + distancia + '\'' +
+                '}';
+    }
+
+    @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(ID);
         dest.writeInt(id_categoria);

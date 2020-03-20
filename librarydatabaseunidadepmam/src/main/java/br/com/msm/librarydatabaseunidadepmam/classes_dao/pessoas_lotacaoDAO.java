@@ -272,7 +272,40 @@ public class pessoas_lotacaoDAO {
         c.close();
         return total;
     }
+
+    public pessoas_lotacaoVO lista( String id_unidade) {
+
+
+        String[] busca = new String[]{id_unidade};
+
+        try {
+            SQLiteDatabase db = new DBUnidadePMAMHelper(ctx).getWritableDatabase();
+
+            Cursor c = db.query(table_name, colunas, "id_unidade = ?", busca, null, null, null);
+
+            if (c == null) {
+                return null;
+            } else if (!c.moveToFirst()) {
+                c.close();
+                return null;
+            }
+            pessoas_lotacaoVO geo = new pessoas_lotacaoVO();
+            geo.setId_unidade(c.getInt(c.getColumnIndex("id_unidade")));
+            geo.setPessoa_nome(c.getString(c.getColumnIndex("pessoa_nome")));
+            geo.setFuncao(c.getString(c.getColumnIndex("funcao")));
+            geo.setTelefone_corporativo(c.getString(c.getColumnIndex("telefone_corporativo")));
+            return  geo;
+        }  catch (Exception e) {
+            e.printStackTrace();
+            return  null;
+        }
+    }
+
+
+
     public List<pessoas_lotacaoVO> lista() {
+
+
 
         List<pessoas_lotacaoVO> lista = new ArrayList<pessoas_lotacaoVO>();
         try {

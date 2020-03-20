@@ -9,6 +9,17 @@ public class pessoas_lotacaoVO {
     private String funcao;
     private String telefone_corporativo;
 
+    @Override
+    public String toString() {
+        return "pessoas_lotacaoVO{" +
+                "id_unidade=" + id_unidade +
+                ", nomeLotacaoSuperior='" + nomeLotacaoSuperior + '\'' +
+                ", pessoa_nome='" + pessoa_nome + '\'' +
+                ", funcao='" + funcao + '\'' +
+                ", telefone_corporativo='" + telefone_corporativo + '\'' +
+                '}';
+    }
+
     public String getNomeLotacaoSuperior() {
         return nomeLotacaoSuperior;
     }
