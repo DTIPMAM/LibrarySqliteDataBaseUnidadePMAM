@@ -9,6 +9,7 @@ import android.database.sqlite.SQLiteDatabase;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.com.msm.librarydatabaseunidadepmam.classes_vo.dados;
 import br.com.msm.librarydatabaseunidadepmam.classes_vo.lotacao_superiorVO;
 import br.com.msm.librarydatabaseunidadepmam.database.DBUnidadePMAMHelper;
 
@@ -34,6 +35,20 @@ public class lotacao_superiorDAO {
         }else{
             return false;
         } }
+
+    public boolean insert(dados geo) {
+        SQLiteDatabase db     = new DBUnidadePMAMHelper(ctx).getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("id_categoria", geo.getId_categoria());
+        values.put("cod_parent", geo.getID_PARENT());
+        values.put("nomeLotacaoSuperior", geo.getNomeLotacaoSuperior());
+        if(db.insert(table_name, null, values) > 0){
+            db.close();
+            return true;
+        }else{
+            return false;
+        } }
+
     public Cursor buscarTudocod(int cod) {
 
             SQLiteDatabase db = new DBUnidadePMAMHelper(ctx).getWritableDatabase();
@@ -52,18 +67,29 @@ public class lotacao_superiorDAO {
     public boolean update(lotacao_superiorVO geo , String cod_parent) {
 
 
-        String[] update = new String[]{String.valueOf(cod_parent)};
-
         SQLiteDatabase db     = new DBUnidadePMAMHelper(ctx).getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put("id_categoria", geo.getId_categoria());
         values.put("nomeLotacaoSuperior", geo.getnomeLotacaoSuperior());
-        if(db.update(table_name, values, "cod_parent = ?", update) > 0){
+        if(db.update(table_name, values, "cod_parent = ?",new String[]{cod_parent}) > 0){
             db.close();
             return true;
         }else{
             return false;
         } }
+
+    public boolean update(dados geo , String cod_parent) {
+        SQLiteDatabase db     = new DBUnidadePMAMHelper(ctx).getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("id_categoria", geo.getId_categoria());
+        values.put("nomeLotacaoSuperior", geo.getNomeLotacaoSuperior());
+        if(db.update(table_name, values, "cod_parent = ?", new String[]{cod_parent}) > 0){
+            db.close();
+            return true;
+        }else{
+            return false;
+        } }
+
     public boolean deletaTudo() {
 
         SQLiteDatabase db    = new DBUnidadePMAMHelper(ctx).getWritableDatabase();

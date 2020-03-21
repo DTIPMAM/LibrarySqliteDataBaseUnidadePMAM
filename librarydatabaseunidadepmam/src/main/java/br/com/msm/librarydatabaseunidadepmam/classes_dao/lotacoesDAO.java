@@ -10,6 +10,7 @@ import android.database.sqlite.SQLiteDatabase;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.com.msm.librarydatabaseunidadepmam.classes_vo.dados;
 import br.com.msm.librarydatabaseunidadepmam.classes_vo.lotacoesVO;
 import br.com.msm.librarydatabaseunidadepmam.database.DBUnidadePMAMHelper;
 
@@ -42,6 +43,32 @@ public class lotacoesDAO {
         values.put("fone2", geo.getTelSA());
         values.put("latitude", geo.getLat());
         values.put("longitude", geo.getLng());
+        values.put("nro_radio", geo.getNro_radio());
+        if (db.insert(table_name, null, values) > 0) {
+            db.close();
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+
+    public boolean insert(dados geo) {
+        SQLiteDatabase db = new DBUnidadePMAMHelper(ctx).getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("_id", geo.getID());
+        values.put("id_categoria", geo.getId_categoria());
+        values.put("cod_parent", geo.getID_PARENT());
+        values.put("nomeLotacaoSuperior", geo.getNomeLotacaoSuperior());
+        values.put("nome", geo.getNOME());
+        values.put("sigla", geo.getSigla());
+        values.put("endereco", geo.getEndereco());
+        values.put("descr", geo.getDescricao());
+        values.put("email_institucional", geo.getEmail_institucional());
+        values.put("fone1", geo.getFone1());
+        values.put("fone2", geo.getFone2());
+        values.put("latitude", geo.getLatitude());
+        values.put("longitude", geo.getLongitude());
         values.put("nro_radio", geo.getNro_radio());
         if (db.insert(table_name, null, values) > 0) {
             db.close();
@@ -232,6 +259,32 @@ public class lotacoesDAO {
         values.put("fone2", geo.getTelSA());
         values.put("latitude", geo.getLat());
         values.put("longitude", geo.getLng());
+        values.put("nro_radio", geo.getNro_radio());
+        if (db.update(table_name, values, "_id = ?", update) > 0) {
+            db.close();
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+
+    public boolean update(dados geo, String ID) {
+        String[] update = new String[]{ID};
+        SQLiteDatabase db = new DBUnidadePMAMHelper(ctx).getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("id_categoria", geo.getId_categoria());
+        values.put("cod_parent", geo.getID_PARENT());
+        values.put("nomeLotacaoSuperior", geo.getNomeLotacaoSuperior());
+        values.put("nome", geo.getNOME());
+        values.put("sigla", geo.getSigla());
+        values.put("endereco", geo.getEndereco());
+        values.put("descr", geo.getDescricao());
+        values.put("email_institucional", geo.getEmail_institucional());
+        values.put("fone1", geo.getFone1());
+        values.put("fone2", geo.getFone2());
+        values.put("latitude", geo.getLatitude());
+        values.put("longitude", geo.getLongitude());
         values.put("nro_radio", geo.getNro_radio());
         if (db.update(table_name, values, "_id = ?", update) > 0) {
             db.close();
