@@ -165,7 +165,7 @@ public class updateUnidadesPMAM {
 
         if (jsa1.size() > 0) {
             progressor = new MaterialDialog.Builder(context)
-                    .content("atualizando dados...")
+                    .content("Atualizando dados...")
                     .progress(false, jsa1.size(), true)
                     .progressNumberFormat("%1d de %2d")
                     .progressPercentFormat(NumberFormat.getPercentInstance())
@@ -174,19 +174,15 @@ public class updateUnidadesPMAM {
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-
                     int pag = 0;
                     do {
                         hl.sendEmptyMessage(1);
-
                         progressor.setProgress(pag);
-
 
                         JsonObject jo1 = (jsa1.get(pag).isJsonObject()) ? jsa1.get(pag).getAsJsonObject() : new JsonObject();
                         JsonArray jsaAuxLC = (jo1.has("auxLotacoesContatosMany") && jo1.get("auxLotacoesContatosMany").isJsonArray()) ? jo1.getAsJsonArray("auxLotacoesContatosMany") : new JsonArray();
                         if (jsaAuxLC.size() > 0) {
                             JsonObject jo2 = (jsaAuxLC.get(0).isJsonObject()) ? jsaAuxLC.get(0).getAsJsonObject() : new JsonObject();
-
                             jo1.addProperty("fone1", (jo2.has("fone1")) ? jo2.get("fone1").getAsString() : "");
                             jo1.addProperty("fone2", (jo2.has("fone2")) ? jo2.get("fone2").getAsString() : "");
                             jo1.addProperty("email_institucional", (jo2.has("email_institucional")) ? jo2.get("email_institucional").getAsString() : "");
