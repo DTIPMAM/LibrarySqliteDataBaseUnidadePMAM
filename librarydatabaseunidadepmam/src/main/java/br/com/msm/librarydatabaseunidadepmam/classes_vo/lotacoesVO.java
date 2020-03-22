@@ -75,11 +75,11 @@ public class lotacoesVO implements Parcelable {
     public lotacoesVO(JsonObject js) {
         //  "_id", "id_categoria", "cod_parent","nomeLotacaoSuperior", "nome","endereco",
         //            "descr","email_institucional","fone1","fone2", "latitude", "longitude","nro_radio", "sigla"};
-        this.ID = js.has("_id") && !js.get("_id").isJsonNull() ? Integer.parseInt(js.get("_id").getAsString()) : 0;
+        this.ID = js.has("_id") && !js.get("_id").isJsonNull() && !js.get("_id").getAsString().isEmpty() ? Integer.parseInt(js.get("_id").getAsString()) : 0;
 
-        this.id_categoria = js.has("id_categoria") && !js.get("id_categoria").isJsonNull() ? Integer.parseInt(js.get("id_categoria").getAsString()) : 0;
+        this.id_categoria = js.has("id_categoria") && !js.get("id_categoria").isJsonNull() && !js.get("id_categoria").getAsString().isEmpty() ? Integer.parseInt(js.get("id_categoria").getAsString()) : 0;
 
-        this.cod_parent = js.has("cod_parent") && !js.get("cod_parent").isJsonNull() ? Integer.parseInt(js.get("cod_parent").getAsString()) : 0;
+        this.cod_parent = js.has("cod_parent") && !js.get("cod_parent").isJsonNull() && !js.get("cod_parent").getAsString().isEmpty() ? Integer.parseInt(js.get("cod_parent").getAsString()) : 0;
 
         this.nomeLotacaoSuperior = js.has("nomeLotacaoSuperior") && !js.get("nomeLotacaoSuperior").isJsonNull() ? js.get("nomeLotacaoSuperior").getAsString() : "";
 
@@ -94,14 +94,13 @@ public class lotacoesVO implements Parcelable {
 
         this.telSA = js.has("fone2") && !js.get("fone2").isJsonNull() ? js.get("fone2").getAsString() : "";
 
-
         this.detalhes = js.has("descr") && !js.get("descr").isJsonNull() ? js.get("descr").getAsString() : "";
 
-        this.lng = js.has("longitude") && !js.get("longitude").isJsonNull() ? Double.parseDouble(js.get("longitude").getAsString()) : 0;
+        this.lng = js.has("longitude") && !js.get("longitude").isJsonNull() && !js.get("longitude").getAsString().isEmpty() ? Double.parseDouble(js.get("longitude").getAsString()) : 0;
 
-        this.lat = js.has("latitude") && !js.get("latitude").isJsonNull() ? Double.parseDouble(js.get("latitude").getAsString()) : 0;
+        this.lat = js.has("latitude") && !js.get("latitude").isJsonNull() && !js.get("latitude").getAsString().isEmpty() ? Double.parseDouble(js.get("latitude").getAsString()) : 0;
 
-        this.nro_radio = js.has("nro_radio") && !js.get("nro_radio").isJsonNull() ? Float.parseFloat(js.get("nro_radio").getAsString()) : 0;
+        this.nro_radio = js.has("nro_radio") && !js.get("nro_radio").isJsonNull() && !js.get("nro_radio").getAsString().isEmpty() ? Float.parseFloat(js.get("nro_radio").getAsString()) : 0;
 
 
         //   this.distancia =  js.get("distancia").getAsString();
