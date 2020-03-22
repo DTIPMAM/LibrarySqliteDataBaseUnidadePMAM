@@ -197,8 +197,7 @@ public class updateUnidadesPMAM {
                             jo1.addProperty("latitude", "");
                             jo1.addProperty("longitude", "");
                         }
-                        dados lotacao = new Gson().fromJson(jo1, new TypeToken<dados>() {
-                        }.getType());
+                        dados lotacao = new Gson().fromJson(jo1, new TypeToken<dados>() { }.getType());
                         if (!LDAO.Verificalotacao(lotacao.getID())) {
                             LDAO.insert(lotacao);
                         } else {

@@ -15,6 +15,14 @@ public class lotacao_superiorVO {
         return nomeLotacaoSuperior;
     }
 
+    public String getNomeLotacaoSuperior() {
+        return nomeLotacaoSuperior;
+    }
+
+    public void setNomeLotacaoSuperior(String nomeLotacaoSuperior) {
+        this.nomeLotacaoSuperior = nomeLotacaoSuperior;
+    }
+
     public void setnomeLotacaoSuperior(String nomeLotacaoSuperior) {
         this.nomeLotacaoSuperior = nomeLotacaoSuperior;
     }

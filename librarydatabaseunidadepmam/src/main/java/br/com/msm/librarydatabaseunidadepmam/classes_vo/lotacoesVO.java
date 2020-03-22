@@ -8,8 +8,38 @@ import com.google.gson.JsonObject;
 
 public class lotacoesVO implements Parcelable {
 
+    public static final Creator<lotacoesVO>
+            CREATOR = new Creator<lotacoesVO>() {
+
+        public lotacoesVO createFromParcel(Parcel in) {
+            return new lotacoesVO(in);
+        }
+
+        public lotacoesVO[] newArray(int size) {
+            return new lotacoesVO[size];
+        }
+    };
     private int ID;
     private int id_categoria;
+
+    public lotacoesVO(int ID, int id_categoria, int cod_parent, String nomeLotacaoSuperior, String nome, String sigla, String endereco, String email, String tel, String telSA, String detalhes, double lng, double lat, float nro_radio, String distancia) {
+        this.ID = ID;
+        this.id_categoria = id_categoria;
+        this.cod_parent = cod_parent;
+        this.nomeLotacaoSuperior = nomeLotacaoSuperior;
+        this.nome = nome;
+        this.sigla = sigla;
+        this.endereco = endereco;
+        this.email = email;
+        this.tel = tel;
+        this.telSA = telSA;
+        this.detalhes = detalhes;
+        this.lng = lng;
+        this.lat = lat;
+        this.nro_radio = nro_radio;
+        this.distancia = distancia;
+    }
+
     private int cod_parent;
     private String nomeLotacaoSuperior;
     private String nome;
@@ -23,19 +53,6 @@ public class lotacoesVO implements Parcelable {
     private double lat;
     private float nro_radio;
     private String distancia;
-
-
-    public static final Creator<lotacoesVO>
-            CREATOR = new Creator<lotacoesVO>() {
-
-        public lotacoesVO createFromParcel(Parcel in) {
-            return new lotacoesVO(in);
-        }
-
-        public lotacoesVO[] newArray(int size) {
-            return new lotacoesVO[size];
-        }
-    };
 
     public lotacoesVO(lotacoesVO vo) {
         this.ID = vo.getID();
@@ -58,22 +75,38 @@ public class lotacoesVO implements Parcelable {
     public lotacoesVO(JsonObject js) {
         //  "_id", "id_categoria", "cod_parent","nomeLotacaoSuperior", "nome","endereco",
         //            "descr","email_institucional","fone1","fone2", "latitude", "longitude","nro_radio", "sigla"};
-        this.ID = Integer.parseInt(js.get("_id").getAsString());
-        this.id_categoria = Integer.parseInt(js.get("id_categoria").getAsString());
-        this.cod_parent = Integer.parseInt(js.get("cod_parent").getAsString());
-        this.nomeLotacaoSuperior =  js.get("nomeLotacaoSuperior").getAsString();
-        this.nome =  js.get("nome").getAsString();
-        this.sigla =  js.get("sigla").getAsString();
-        this.endereco =  js.get("endereco").getAsString();
-        this.email =  js.get("email_institucional").getAsString();
-        this.tel =  js.get("fone1").getAsString();
-        this.telSA =  js.get("fone2").getAsString();
-        this.detalhes =  js.get("descr").getAsString();
-        this.lng = Double.parseDouble(js.get("longitude").getAsString());
-        this.lat = Double.parseDouble(js.get("latitude").getAsString());
-        this.nro_radio = Float.parseFloat(js.get("nro_radio").getAsString());
-     //   this.distancia =  js.get("distancia").getAsString();
+        this.ID = js.has("_id") && !js.get("_id").isJsonNull() ? Integer.parseInt(js.get("_id").getAsString()) : 0;
+
+        this.id_categoria = js.has("id_categoria") && !js.get("id_categoria").isJsonNull() ? Integer.parseInt(js.get("id_categoria").getAsString()) : 0;
+
+        this.cod_parent = js.has("cod_parent") && !js.get("cod_parent").isJsonNull() ? Integer.parseInt(js.get("cod_parent").getAsString()) : 0;
+
+        this.nomeLotacaoSuperior = js.has("nomeLotacaoSuperior") && !js.get("nomeLotacaoSuperior").isJsonNull() ? js.get("nomeLotacaoSuperior").getAsString() : "";
+
+        this.nome = js.has("nome") && !js.get("nome").isJsonNull() ? js.get("nome").getAsString() : "";
+        this.sigla = js.has("sigla") && !js.get("sigla").isJsonNull() ? js.get("sigla").getAsString() : "";
+
+        this.endereco = js.has("endereco") && !js.get("endereco").isJsonNull() ? js.get("endereco").getAsString() : "";
+
+        this.email = js.has("email") && !js.get("email").isJsonNull() ? js.get("email").getAsString() : "";
+
+        this.tel = js.has("fone1") && !js.get("fone1").isJsonNull() ? js.get("fone1").getAsString() : "";
+
+        this.telSA = js.has("fone2") && !js.get("fone2").isJsonNull() ? js.get("fone2").getAsString() : "";
+
+
+        this.detalhes = js.has("descr") && !js.get("descr").isJsonNull() ? js.get("descr").getAsString() : "";
+
+        this.lng = js.has("longitude") && !js.get("longitude").isJsonNull() ? Double.parseDouble(js.get("longitude").getAsString()) : 0;
+
+        this.lat = js.has("latitude") && !js.get("latitude").isJsonNull() ? Double.parseDouble(js.get("latitude").getAsString()) : 0;
+
+        this.nro_radio = js.has("nro_radio") && !js.get("nro_radio").isJsonNull() ? Float.parseFloat(js.get("nro_radio").getAsString()) : 0;
+
+
+        //   this.distancia =  js.get("distancia").getAsString();
     }
+
     public lotacoesVO(Parcel in) {
         this.ID = in.readInt();
         this.id_categoria = in.readInt();
@@ -90,6 +123,9 @@ public class lotacoesVO implements Parcelable {
         this.lat = in.readDouble();
         this.nro_radio = in.readFloat();
         this.distancia = in.readString();
+    }
+
+    public lotacoesVO() {
     }
 
     public String getDistancia() {
@@ -215,9 +251,6 @@ public class lotacoesVO implements Parcelable {
     @Override
     public int describeContents() {
         return 0;
-    }
-
-    public lotacoesVO() {
     }
 
     @Override
