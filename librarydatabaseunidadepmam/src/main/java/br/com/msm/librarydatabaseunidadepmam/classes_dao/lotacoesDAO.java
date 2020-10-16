@@ -320,6 +320,7 @@ public class lotacoesDAO {
             while (c.moveToNext()) {
                 lotacoesVO geo = new lotacoesVO();
                 geo.setID(c.getInt(c.getColumnIndex("_id")));
+				geo.setNro_radio(c.getFloat(c.getColumnIndex("nro_radio")));
                 geo.setId_categoria(c.getInt(c.getColumnIndex("id_categoria")));
                 geo.setId_categoria(c.getInt(c.getColumnIndex("cod_parent")));
                 geo.setNomeLotacaoSuperior(c.getString(c.getColumnIndex("nomeLotacaoSuperior")));
