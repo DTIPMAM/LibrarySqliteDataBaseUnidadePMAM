@@ -301,7 +301,14 @@ public class lotacoesDAO {
         try {
             SQLiteDatabase db = new DBUnidadePMAMHelper(ctx).getWritableDatabase();
             Cursor c = db.query(table_name, colunas, null, null, null, null, null);
-
+			if (c == null) {
+				db.close();
+				return null;
+			} else if (!c.moveToFirst()) {
+				c.close();
+				db.close();
+				return null;
+			}
             while (c.moveToNext()) {
                 lotacoesVO geo = new lotacoesVO();
                 geo.setID(c.getInt(c.getColumnIndex("_id")));
@@ -319,6 +326,8 @@ public class lotacoesDAO {
                 geo.setLng(c.getInt(c.getColumnIndex("longitude")));
                 lista.add(geo);
             }
+			c.close();
+			db.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -337,7 +346,8 @@ public class lotacoesDAO {
             return null;
         }
         lotacoesVO geo = new lotacoesVO();
-        geo.setID(c.getInt(c.getColumnIndex("_id")));
+		geo.setID(c.getInt(c.getColumnIndex("_id")));
+		geo.setNro_radio(c.getFloat(c.getColumnIndex("nro_radio")));
         geo.setId_categoria(c.getInt(c.getColumnIndex("id_categoria")));
         geo.setId_categoria(c.getInt(c.getColumnIndex("cod_parent")));
         geo.setNomeLotacaoSuperior(c.getString(c.getColumnIndex("nomeLotacaoSuperior")));
@@ -448,8 +458,9 @@ public class lotacoesDAO {
         }
     }
 
-	public Cursor buscarTudocod(int cod) {
-
+	public ArrayList<lotacoesVO> buscarTudocod(int cod) {
+		ArrayList<lotacoesVO> lista = new ArrayList<lotacoesVO>();
+		try {
 		SQLiteDatabase db = new DBUnidadePMAMHelper(ctx).getWritableDatabase();
 		String[] busca = new String[]{String.valueOf(cod)};
 		Cursor c = db.query(table_name, colunas, "id_categoria = ?", busca, null, null, "nro_radio ASC", null);
@@ -461,7 +472,29 @@ public class lotacoesDAO {
 			db.close();
 			return null;
 		}
-		return c;
+		while (c.moveToNext()) {
+			lotacoesVO geo = new lotacoesVO();
+			geo.setID(c.getInt(c.getColumnIndex("_id")));
+			geo.setNro_radio(c.getFloat(c.getColumnIndex("nro_radio")));
+			geo.setId_categoria(c.getInt(c.getColumnIndex("id_categoria")));
+			geo.setId_categoria(c.getInt(c.getColumnIndex("cod_parent")));
+			geo.setNomeLotacaoSuperior(c.getString(c.getColumnIndex("nomeLotacaoSuperior")));
+			geo.setNome(c.getString(c.getColumnIndex("nome")));
+			geo.setEndereco(c.getString(c.getColumnIndex("endereco")));
+			geo.setDetalhes(c.getString(c.getColumnIndex("descr")));
+			geo.setEmail(c.getString(c.getColumnIndex("email_institucional")));
+			geo.setTel(c.getString(c.getColumnIndex("fone1")));
+			geo.setTelSA(c.getString(c.getColumnIndex("fone2")));
+			geo.setLat(c.getInt(c.getColumnIndex("latitude")));
+			geo.setLng(c.getInt(c.getColumnIndex("longitude")));
+			lista.add(geo);
+		}
+		c.close();
+		db.close();
+	} catch (Exception e) {
+		e.printStackTrace();
+	}
+        return lista;
 
 	}
 }
