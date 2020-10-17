@@ -44,12 +44,7 @@ public class lotacoesDAO {
         values.put("latitude", geo.getLat());
         values.put("longitude", geo.getLng());
         values.put("nro_radio", geo.getNro_radio());
-        if (db.insert(table_name, null, values) > 0) {
-            db.close();
-            return true;
-        } else {
-            return false;
-        }
+		return (db.insert(table_name, null, values) > 0);
     }
 
 
@@ -70,12 +65,7 @@ public class lotacoesDAO {
         values.put("latitude", geo.getLatitude());
         values.put("longitude", geo.getLongitude());
         values.put("nro_radio", geo.getNro_radio());
-        if (db.insert(table_name, null, values) > 0) {
-            db.close();
-            return true;
-        } else {
-            return false;
-        }
+		return (db.insert(table_name, null, values) > 0);
     }
 
     public boolean Verificalotacao(String codbg) {
@@ -286,12 +276,7 @@ public class lotacoesDAO {
         values.put("latitude", geo.getLatitude());
         values.put("longitude", geo.getLongitude());
         values.put("nro_radio", geo.getNro_radio());
-        if (db.update(table_name, values, "_id = ?", update) > 0) {
-            db.close();
-            return true;
-        } else {
-            return false;
-        }
+        return  (db.update(table_name, values, "_id = ?", update) > 0);
     }
 
     public boolean deletaTudo() {
@@ -462,4 +447,21 @@ public class lotacoesDAO {
             return null;
         }
     }
+
+	public Cursor buscarTudocod(int cod) {
+
+		SQLiteDatabase db = new DBUnidadePMAMHelper(ctx).getWritableDatabase();
+		String[] busca = new String[]{String.valueOf(cod)};
+		Cursor c = db.query(table_name, colunas, "id_categoria = ?", busca, null, null, "nro_radio ASC", null);
+		if (c == null) {
+			db.close();
+			return null;
+		} else if (!c.moveToFirst()) {
+			c.close();
+			db.close();
+			return null;
+		}
+		return c;
+
+	}
 }
