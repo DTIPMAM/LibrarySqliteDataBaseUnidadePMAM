@@ -477,7 +477,7 @@ public class lotacoesDAO {
 			geo.setID(c.getInt(c.getColumnIndex("_id")));
 			geo.setNro_radio(c.getFloat(c.getColumnIndex("nro_radio")));
 			geo.setId_categoria(c.getInt(c.getColumnIndex("id_categoria")));
-			geo.setId_categoria(c.getInt(c.getColumnIndex("cod_parent")));
+			geo.setCod_parent(c.getInt(c.getColumnIndex("cod_parent")));
 			geo.setNomeLotacaoSuperior(c.getString(c.getColumnIndex("nomeLotacaoSuperior")));
 			geo.setNome(c.getString(c.getColumnIndex("nome")));
 			geo.setEndereco(c.getString(c.getColumnIndex("endereco")));
