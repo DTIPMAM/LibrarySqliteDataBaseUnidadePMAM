@@ -120,7 +120,7 @@ public class updateUnidadesPMAM {
 
             Ion.with(context).load(LotacoesEnderecos)
                     .setBodyParameter("currentPage", String.valueOf(0))
-                    .setBodyParameter("listPerPage", String.valueOf(200))
+                    .setBodyParameter("listPerPage", String.valueOf(315))
                     .asJsonObject().setCallback(new FutureCallback<JsonObject>() {
                 @Override
                 public void onCompleted(Exception e, JsonObject result) {
