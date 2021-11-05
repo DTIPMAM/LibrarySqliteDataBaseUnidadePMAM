@@ -2,6 +2,7 @@ package br.com.msm.librarydatabaseunidadepmam;
 
 import android.content.Context;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
 
@@ -53,7 +54,7 @@ public class updateUnidadesPMAM {
     private String eDesconhecido = "Desculpe, algo deu errado. Tente novamente mais tarde";
     private ArrayList<ObjJsonPessoaFuncao> listPS;
     private MaterialDialog progressor;
-    public Handler hl = new Handler() {
+    public Handler hl = new Handler(Looper.myLooper()) {
         public void handleMessage(Message msg) {
             if (msg.what == 0) {
                 progressor.setProgress(progressor.getCurrentProgress() + 1);
