@@ -7,10 +7,16 @@ import android.os.AsyncTask;
 import com.afollestad.materialdialogs.MaterialDialog;
 
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketAddress;
+import java.net.UnknownHostException;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 
 public class Util {
@@ -26,35 +32,23 @@ public class Util {
     }
 
     public static boolean isOnline() {
-
-        AsyncTask<Void, Void, Boolean> task = new AsyncTask<Void, Void, Boolean>() {
-
-            @Override
-            protected Boolean doInBackground(Void... voids) {
-                try {
-                    int timeoutMs = 1500;
-                    Socket sock = new Socket();
-                    SocketAddress sockaddr = new InetSocketAddress("8.8.8.8", 53); //www.google.com
-                    //  SocketAddress sockaddr = new InetSocketAddress("45.40.132.20", 53); //pmam.online
-
-                    sock.connect(sockaddr, timeoutMs);
-                    sock.close();
-
-                    return true;
-                } catch (IOException e) { return false; }
-            }
-        };
-        AsyncTask<Void, Void, Boolean> ret = task.execute();
+        int timeOut = 3000;
+        InetAddress inetAddress = null;
         try {
-            return ret.get();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-            return  false;
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-            return  false;
-        }
+            Future<InetAddress> future = Executors.newSingleThreadExecutor().submit(() -> {
+                try {
+                    return InetAddress.getByName("google.com");
+                } catch (UnknownHostException e) {
+                    return null;
+                }
+            });
+            inetAddress = future.get(timeOut, TimeUnit.MILLISECONDS);
+            future.cancel(true);
+        } catch (InterruptedException | TimeoutException | ExecutionException e) {
 
+            e.printStackTrace();
+        }
+        return inetAddress!=null && !inetAddress.equals("");
     }
 
 }
