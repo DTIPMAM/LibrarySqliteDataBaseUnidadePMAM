@@ -3,6 +3,7 @@ package br.com.msm.libraryslitedatabaseunidadepmam;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
@@ -61,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
 		position = 0;
 
 	 findViewById(R.id.button).setOnClickListener(new View.OnClickListener() {
+
 		 @Override
 		 public void onClick(View v) {
 
