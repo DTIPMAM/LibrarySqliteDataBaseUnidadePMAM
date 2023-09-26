@@ -2,12 +2,12 @@ apply plugin: 'com.android.library'
 group='com.github.maycon1038'
 
 android {
-    compileSdk 33
+    compileSdk 34
 
 
     defaultConfig {
         minSdk 23
-        targetSdk 33
+        targetSdk 34
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
     }
