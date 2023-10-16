@@ -59,20 +59,17 @@ public class MainActivity extends AppCompatActivity {
 		final TextView txtv = findViewById(R.id.textView);
 
 		final TextView txtResult = findViewById(R.id.txtResult);
-		position = 0;
 
-	 findViewById(R.id.button).setOnClickListener(new View.OnClickListener() {
+		position = 0;
+		findViewById(R.id.button).setOnClickListener(new View.OnClickListener() {
 
 		 @Override
 		 public void onClick(View v) {
-
-		 	    if(lt != null && position > 0){
-					position --;
-
-
-					txtResult.setText(lt.get(position).toString() +
-							"\n     Pessoa Contato "+ "\n"+
-							daop.lista(String.valueOf(lt.get(position).getID())).toString()) ;
+			 if(lt != null && position > 0){
+				 position --;
+				 txtResult.setText(lt.get(position).toString() +
+						 "\n     Pessoa Contato "+ "\n"+
+						 daop.lista(String.valueOf(lt.get(position).getID())).toString()) ;
 				}
 			 txtv.setText(String.valueOf(position));
 		 }
