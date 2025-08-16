@@ -77,9 +77,7 @@ public class MainActivity extends BaseActivity {
 		 public void onClick(View v) {
 			 if(lt != null && position > 1){
 				 position --;
-				 txtResult.setText(lt.get(position).toString() +
-						 "\n     Pessoa Contato "+ "\n"+
-						 daop.lista(String.valueOf(lt.get(position).getID())).toString()) ;
+				 txtResult.setText(lt.get(position).toString());
 				}
 			 txtv.setText(String.valueOf(position));
 		 }
