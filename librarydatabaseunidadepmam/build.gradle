@@ -1,22 +1,33 @@
 apply plugin: 'com.android.library'
-group='com.github.maycon1038'
-
+group='com.github.dtipmam'
+apply plugin: 'maven-publish'
 android {
     compileSdk 35
     defaultConfig {
         minSdk 24
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        targetSdk 35 
 
     }
 
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-        }
-    }
+
     namespace 'br.com.msm.librarydatabaseunidadepmam'
 
+}
+
+afterEvaluate {
+    publishing {
+        publications {
+            release(MavenPublication) {
+                // Configuração para versões mais antigas
+                artifact bundleReleaseAar
+                artifact sourcesJar // Opcional: inclui fontes
+
+                groupId = 'com.github.dtipmam'
+                artifactId = 'librarydatabaseunidadepmam'
+                version = '4.2.3'
+            }
+        }
+    }
 }
 
 dependencies {
@@ -31,4 +42,9 @@ dependencies {
     implementation 'org.projectlombok:lombok:1.18.30'
     annotationProcessor 'org.projectlombok:lombok:1.18.30'
 
+}
+// Tarefa sourcesJar deve estar no mesmo arquivo do módulo Android
+task sourcesJar(type: Jar) {
+    from android.sourceSets.main.java.srcDirs
+    archiveClassifier.set('sources')
 }
