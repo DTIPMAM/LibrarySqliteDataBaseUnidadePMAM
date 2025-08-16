@@ -3,31 +3,16 @@ package br.com.msm.librarydatabaseunidadepmam;
 import static br.com.msm.librarydatabaseunidadepmam.util.Util.Progress;
 
 import android.content.Context;
-import android.os.Handler;
-import android.os.Looper;
-import android.os.Message;
-import android.util.Log;
-import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import com.google.gson.reflect.TypeToken;
-import com.koushikdutta.async.future.FutureCallback;
-import com.koushikdutta.ion.Ion;
 
-import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 import br.com.msm.librarydatabaseunidadepmam.classes_dao.lotacao_superiorDAO;
 import br.com.msm.librarydatabaseunidadepmam.classes_dao.lotacoesDAO;
 import br.com.msm.librarydatabaseunidadepmam.classes_dao.pessoas_lotacaoDAO;
-import br.com.msm.librarydatabaseunidadepmam.classes_vo.dados;
 import br.com.msm.librarydatabaseunidadepmam.classes_vo.lotacao_superiorVO;
-import br.com.msm.librarydatabaseunidadepmam.classes_vo.lotacoesVO;
 import br.com.msm.librarydatabaseunidadepmam.classes_vo.pessoas_lotacaoVO;
 import br.com.msm.librarydatabaseunidadepmam.interfaces.iLotacao;
 import br.com.msm.librarydatabaseunidadepmam.interfaces.resultUpdate;
@@ -60,6 +45,8 @@ public class updateUnidadesPMAM {
     private WebServiceApp ws;
 
     private MaterialDialog pg;
+
+    private  iLotacao ilotacao;
 
     private updateUnidadesPMAM(Context context, String name) {
         this.context = context;
@@ -97,21 +84,13 @@ public class updateUnidadesPMAM {
     public void start(resultUpdate callback) {
         this.iOpms = callback;
         ws = new WebServiceApp(context);
-        startVerificarQuantidadeLotacoes(this.iOpms);
+        ws.updateOPms(iOpms);
     }
 
-    private void startVerificarQuantidadeLotacoes(final resultUpdate opms) {
-        if (Util.isOnline()) {
-            pg = Progress(context);
-            pg.show();
-            ws.getAllOpms(result -> {
-                pg.dismiss();
-                opms.setResult(result);
-            });
-
-
-        }
+    public void startList(iLotacao callback) {
+        this.ilotacao = callback;
+        ws = new WebServiceApp(context);
+        ws.getAndUpdate(ilotacao);
     }
-
 
 }

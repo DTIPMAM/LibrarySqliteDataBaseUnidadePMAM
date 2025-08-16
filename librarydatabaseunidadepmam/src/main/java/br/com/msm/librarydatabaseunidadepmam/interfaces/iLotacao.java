@@ -6,5 +6,6 @@ import br.com.msm.librarydatabaseunidadepmam.classes_vo.lotacoesVO;
 
 public interface iLotacao {
 
-	public void setLotacoes(List<lotacoesVO> result, String erro);
+	public void setResult(List<lotacoesVO> opms, String erro);
+
 }

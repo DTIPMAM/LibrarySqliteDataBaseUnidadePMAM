@@ -3,14 +3,12 @@ package br.com.msm.librarydatabaseunidadepmam;
 import android.content.Context;
 import android.util.Log;
 
-import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import com.koushikdutta.ion.Ion;
 
-import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -24,6 +22,7 @@ import br.com.msm.librarydatabaseunidadepmam.classes_vo.dados;
 import br.com.msm.librarydatabaseunidadepmam.classes_vo.lotacao_superiorVO;
 import br.com.msm.librarydatabaseunidadepmam.classes_vo.lotacoesVO;
 import br.com.msm.librarydatabaseunidadepmam.classes_vo.retorno;
+import br.com.msm.librarydatabaseunidadepmam.interfaces.iLotacao;
 import br.com.msm.librarydatabaseunidadepmam.interfaces.resultUpdate;
 
 public class WebServiceApp {
@@ -53,7 +52,7 @@ public class WebServiceApp {
 
     }
 
-    public void getAllOpms(resultUpdate iDocs) {
+    public void updateOPms(resultUpdate iDocs) {
         Ion.with(ctx).load(LotacoesEnderecos)
                 .setLogging("API_OPM", Log.DEBUG)
                 .asJsonObject().setCallback((e, result) -> {
@@ -62,58 +61,92 @@ public class WebServiceApp {
                         retorno r = new Gson().fromJson(result, new TypeToken<retorno>() {
                         }.getType());
                         if (r.getRetorno().equalsIgnoreCase("YES")) {
-                            List<CompletableFuture<lotacoesVO>> FuturesList = new ArrayList<>();
-                            for (int i = 1; i <= r.getTotalPager(); i++) {
-                                FuturesList.add(getAllOpms(r.getTotalPager(), i));
-                            }
+                            CompletableFuture<List<lotacoesVO>> futureList = getAllOpms(r.getItem_count(), 1);
                             // Quando todos os processamentos de escala individual estiverem completos
-                            CompletableFuture.allOf(FuturesList.toArray(new CompletableFuture[0]))
-                                    .thenApply(v -> FuturesList.stream()
+                            futureList.thenApply(list -> list.stream()
                                             .map(future -> {
                                                 try {
-                                                    return future.get(); // .get() é seguro aqui
+                                                    return future; // .get() é seguro aqui
                                                 } catch (Exception e2) {
                                                     LogD(new Throwable(), "Erro ao obter dados: " + e2.getMessage());
                                                     return null; // ou tratar de outra forma
                                                 }
                                             })
                                             .filter(Objects::nonNull) // Filtra escalas nulas (em caso de erro no processamento individual)
-                                            .collect(Collectors.toList()))
-                                    .whenComplete((ListOpms, ex) -> {
+                                            .collect(Collectors.toList())
+                                    ).whenComplete((ListOpms, ex) -> {
                                         if (ex == null) {
                                             iDocs.setResult("Dados atualizados com sucesso.");
                                         } else {
-                                            iDocs.setResult(ex.getMessage());
+                                            iDocs.setResult( ex.getMessage());
                                         }
                                     });
-
                         } else {
                             iDocs.setResult("Desculpe, algo deu errado. Tente novamente mais tarde.");
                         }
                     } else if (e != null) {
-                        iDocs.setResult(e.getMessage());
+                        iDocs.setResult( e.getMessage());
                     } else {
                         iDocs.setResult("Desculpe, algo deu errado. Tente novamente mais tarde.");
                     }
                 });
     }
 
-    private CompletableFuture<lotacoesVO> getAllOpms(int itemCount, int currentPage) {
-        CompletableFuture<lotacoesVO> singlePageFuture = new CompletableFuture<>();
+    public void getAndUpdate(iLotacao iDocs) {
+        Ion.with(ctx).load(LotacoesEnderecos)
+                .setLogging("API_OPM", Log.DEBUG)
+                .asJsonObject().setCallback((e, result) -> {
+                    if (result != null) {
+                        LogD(new Throwable(), result.toString());
+                        retorno r = new Gson().fromJson(result, new TypeToken<retorno>() {
+                        }.getType());
+                        if (r.getRetorno().equalsIgnoreCase("YES")) {
+                            CompletableFuture<List<lotacoesVO>> futureList = getAllOpms(r.getItem_count(), 1);
+                            // Quando todos os processamentos de escala individual estiverem completos
+                            futureList.thenApply(list -> list.stream()
+                                    .map(future -> {
+                                        try {
+                                            return future; // .get() é seguro aqui
+                                        } catch (Exception e2) {
+                                            LogD(new Throwable(), "Erro ao obter dados: " + e2.getMessage());
+                                            return null; // ou tratar de outra forma
+                                        }
+                                    })
+                                    .filter(Objects::nonNull) // Filtra escalas nulas (em caso de erro no processamento individual)
+                                    .collect(Collectors.toList())
+                            ).whenComplete((ListOpms, ex) -> {
+                                if (ex == null) {
+                                    iDocs.setResult(ListOpms,"Dados atualizados com sucesso.");
+                                } else {
+                                    iDocs.setResult(null, ex.getMessage());
+                                }
+                            });
+                        } else {
+                            iDocs.setResult(null,"Desculpe, algo deu errado. Tente novamente mais tarde.");
+                        }
+                    } else if (e != null) {
+                        iDocs.setResult(null, e.getMessage());
+                    } else {
+                        iDocs.setResult(null,"Desculpe, algo deu errado. Tente novamente mais tarde.");
+                    }
+                });
+    }
+
+    private CompletableFuture<List<lotacoesVO>> getAllOpms(String itemCount, int currentPage) {
+        CompletableFuture<List<lotacoesVO>> singlePageFuture = new CompletableFuture<>();
         // final int currentPage = i; // Variável final para uso dentro da lambda
         Ion.with(ctx)
                 .load(LotacoesEnderecos)
                 .setLogging("API_OPM_PAGE_" + currentPage, Log.DEBUG) // Log específico por página
                 .setBodyParameter("currentPage", String.valueOf(currentPage))
-                .setBodyParameter("listPerPage", String.valueOf(itemCount))
+                .setBodyParameter("listPerPage", itemCount)
                 .asJsonObject()
                 .setCallback((e, result) -> {
                     if (result != null) {
                         try {
                             retorno r = new Gson().fromJson(result, new TypeToken<retorno>() {  }.getType());
                             if (r.getRetorno().equalsIgnoreCase("YES")) {
-                                lotacoesVO lotacoesPageData = processaDados(result);
-                                singlePageFuture.complete(lotacoesPageData);
+                                singlePageFuture.complete(processaDados(result));
                             } else {
                                 singlePageFuture.completeExceptionally(new RuntimeException("Página de carregamento de erro desconhecido: " + currentPage));
                             }
@@ -133,11 +166,12 @@ public class WebServiceApp {
         return singlePageFuture;
     }
 
-    private lotacoesVO processaDados(JsonObject r) {
-        lotacoesVO lotacao = new lotacoesVO();
+    private List<lotacoesVO> processaDados(JsonObject r) {
+        List<lotacoesVO>  opms = new ArrayList<>();
         JsonArray jsa1 = (r.has("dados") && r.get("dados").isJsonArray()) ? r.get("dados").getAsJsonArray() : new JsonArray();
         if (!jsa1.isEmpty()) {
-            JsonObject jo1 = (jsa1.get(0).isJsonObject()) ? jsa1.get(0).getAsJsonObject() : new JsonObject();
+             jsa1.forEach( element -> {
+                 JsonObject jo1 = (element.isJsonObject()) ? element.getAsJsonObject() : new JsonObject();
             JsonArray jsa2 = (jo1.has("auxLotacoesContatosMany") && jo1.get("auxLotacoesContatosMany").isJsonArray()) ? jo1.get("auxLotacoesContatosMany").getAsJsonArray() : new JsonArray();
             if (!jsa2.isEmpty()) {
                 JsonObject jo2 = (jsa2.get(0).isJsonObject()) ? jsa2.get(0).getAsJsonObject() : new JsonObject();
@@ -155,9 +189,8 @@ public class WebServiceApp {
                 jo1.addProperty("latitude", "");
                 jo1.addProperty("longitude", "");
             }
-            dados bd = new Gson().fromJson(jo1, new TypeToken<dados>() {
-            }.getType());
-            lotacao = new lotacoesVO(bd);
+            dados bd = new Gson().fromJson(jo1, new TypeToken<dados>() {  }.getType());
+             lotacoesVO  lotacao = new lotacoesVO(bd);
             if (!LDAO.Verificalotacao(bd.getID())) {
                 LDAO.insert(lotacao);
             } else {
@@ -168,7 +201,11 @@ public class WebServiceApp {
             } else {
                 LSDAO.update(bd, bd.getID_PARENT());
             }
+             opms.add(lotacao);
+              }
+            );
         }
-        return lotacao;
+
+        return opms;
     }
 }
