@@ -17,6 +17,8 @@ import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.msm.themes.BaseActivity;
+import com.msm.themes.ThemeUtil;
 
 import java.util.List;
 
@@ -30,7 +32,7 @@ import br.com.msm.librarydatabaseunidadepmam.util.Util;
 import static br.com.msm.librarydatabaseunidadepmam.updateUnidadesPMAM.isAtualizarDados;
 import static br.com.msm.librarydatabaseunidadepmam.util.Util.Progress;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity {
 
 	private List<lotacoesVO> lt;
 	private int totalLotacao = 0;
@@ -40,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		ThemeUtil.setMyTheme(this, ThemeUtil.THEME_BLUE);
 		setContentView(R.layout.activity_main);
 
 		pg = Progress(this);
@@ -72,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
 		 @SuppressLint("SetTextI18n")
          @Override
 		 public void onClick(View v) {
-			 if(lt != null && position > 0){
+			 if(lt != null && position > 1){
 				 position --;
 				 txtResult.setText(lt.get(position).toString() +
 						 "\n     Pessoa Contato "+ "\n"+
