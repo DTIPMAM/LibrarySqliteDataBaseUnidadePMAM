@@ -27,474 +27,374 @@ public class lotacoesDAO {
         this.ctx = ctx;
     }
 
-    public boolean insert(lotacoesVO geo) {
-        SQLiteDatabase db = new DBUnidadePMAMHelper(ctx).getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put("_id", geo.getID());
-        values.put("id_categoria", geo.getId_categoria());
-        values.put("cod_parent", geo.getCod_parent());
-        values.put("nomeLotacaoSuperior", geo.getNomeLotacaoSuperior());
-        values.put("nome", geo.getNome());
-        values.put("sigla", geo.getSigla());
-        values.put("endereco", geo.getEndereco());
-        values.put("descr", geo.getDetalhes());
-        values.put("email_institucional", geo.getEmail());
-        values.put("fone1", geo.getTel());
-        values.put("fone2", geo.getTelSA());
-        values.put("latitude", geo.getLat());
-        values.put("longitude", geo.getLng());
-        values.put("nro_radio", geo.getNro_radio());
-		return (db.insert(table_name, null, values) > 0);
+    public boolean insert(lotacoesVO lotacao) {
+        SQLiteDatabase db = null;
+        try {
+            db = new DBUnidadePMAMHelper(ctx).getWritableDatabase();
+            ContentValues values = new ContentValues();
+            values.put("_id", lotacao.getID());
+            values.put("id_categoria", lotacao.getId_categoria());
+            values.put("cod_parent", lotacao.getCod_parent());
+            values.put("nomeLotacaoSuperior", lotacao.getNomeLotacaoSuperior());
+            values.put("nome", lotacao.getNome());
+            values.put("sigla", lotacao.getSigla());
+            values.put("endereco", lotacao.getEndereco());
+            values.put("descr", lotacao.getDetalhes());
+            values.put("email_institucional", lotacao.getEmail());
+            values.put("fone1", lotacao.getTel());
+            values.put("fone2", lotacao.getTelSA());
+            values.put("latitude", lotacao.getLat());
+            values.put("longitude", lotacao.getLng());
+            values.put("nro_radio", lotacao.getNro_radio());
+            return (db.insert(table_name, null, values) > 0);
+        } finally {
+            if (db != null) db.close();
+        }
     }
 
 
     public boolean insert(dados geo) {
-        SQLiteDatabase db = new DBUnidadePMAMHelper(ctx).getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put("_id", geo.getID());
-        values.put("id_categoria", geo.getId_categoria());
-        values.put("cod_parent", geo.getID_PARENT());
-        values.put("nomeLotacaoSuperior", geo.getNomeLotacaoSuperior());
-        values.put("nome", geo.getNOME());
-        values.put("sigla", geo.getSigla());
-        values.put("endereco", geo.getEndereco());
-        values.put("descr", geo.getDescricao());
-        values.put("email_institucional", geo.getEmail_institucional());
-        values.put("fone1", geo.getFone1());
-        values.put("fone2", geo.getFone2());
-        values.put("latitude", geo.getLatitude());
-        values.put("longitude", geo.getLongitude());
-        values.put("nro_radio", geo.getNro_radio());
-		return (db.insert(table_name, null, values) > 0);
+        SQLiteDatabase db = null;
+        try {
+            db = new DBUnidadePMAMHelper(ctx).getWritableDatabase();
+            ContentValues values = new ContentValues();
+            values.put("_id", geo.getID());
+            values.put("id_categoria", geo.getId_categoria());
+            values.put("cod_parent", geo.getID_PARENT());
+            values.put("nomeLotacaoSuperior", geo.getNomeLotacaoSuperior());
+            values.put("nome", geo.getNOME());
+            values.put("sigla", geo.getSigla());
+            values.put("endereco", geo.getEndereco());
+            values.put("descr", geo.getDescricao());
+            values.put("email_institucional", geo.getEmail_institucional());
+            values.put("fone1", geo.getFone1());
+            values.put("fone2", geo.getFone2());
+            values.put("latitude", geo.getLatitude());
+            values.put("longitude", geo.getLongitude());
+            values.put("nro_radio", geo.getNro_radio());
+            return (db.insert(table_name, null, values) > 0);
+        } finally {
+            if (db != null) db.close();
+        }
     }
 
     public boolean Verificalotacao(String codbg) {
-
-        boolean tiporetorn = false;
+        SQLiteDatabase db = null;
+        Cursor c = null;
         try {
-            SQLiteDatabase db = new DBUnidadePMAMHelper(ctx).getWritableDatabase();
+            db = new DBUnidadePMAMHelper(ctx).getWritableDatabase();
             String[] busca = new String[]{codbg};
-
-            Cursor c = db.query(table_name, colunas, "_id = ?", busca, null, null, null, null);
-            if (c.getCount() > 0) {
-                tiporetorn = true;
-            } else {
-                tiporetorn = false;
-            }
-            c.close();
-            db.close();
+            c = db.query(table_name, colunas, "_id = ?", busca, null, null, null, null);
+            return c.getCount() > 0;
         } catch (SQLException e) {
             e.printStackTrace();
+            return false;
+        } finally {
+            if (c != null) c.close();
+            if (db != null) db.close();
         }
-        return tiporetorn;
-    }
-
-    public Cursor buscarTudoporValor(String codigo) {
-
-        String[] busca = new String[]{codigo};
-        SQLiteDatabase db = new DBUnidadePMAMHelper(ctx).getWritableDatabase();
-
-        Cursor c = db.query(table_name, colunas, "_id LIKE ? or nomeLotacaoSuperior LIKE ? or nome LIKE ? or endereco LIKE ?", busca, null, null, "_id ASC", null);
-
-        if (c == null) {
-            return null;
-        } else if (!c.moveToFirst()) {
-            c.close();
-            return null;
-        }
-        return c;
     }
 
     public Cursor buscarTudo() {
-        SQLiteDatabase db = new DBUnidadePMAMHelper(ctx).getWritableDatabase();
-
-        Cursor c = db.query(table_name, colunas, null, null, null, null, "_id ASC", null);
-
-        if (c == null) {
-            db.close();
-            return null;
-        } else if (!c.moveToFirst()) {
-            c.close();
-            db.close();
-            return null;
-        }
-        return c;
-    }
-
-    //-----------------------------------------
-    public Cursor buscarString(String codigo, String txtbusca) {
-        SQLiteDatabase db = new DBUnidadePMAMHelper(ctx).getWritableDatabase();
-        String[] busca = new String[]{codigo, txtbusca};
-
-        Cursor c = db.query(table_name, colunas, "id_categoria = ? and cod_parent = ?", busca, null, null, "_id ASC", null);
-
-        if (c == null) {
-            c.close();
-            return null;
-        } else if (!c.moveToFirst()) {
-            c.close();
-            return null;
-        }
-        return c;
-    }
-
-    public Cursor buscarStrings(String txt) {
-        SQLiteDatabase db = new DBUnidadePMAMHelper(ctx).getWritableDatabase();
-        String[] busca = new String[]{"%" + txt + "%", "%" + txt + "%"};
-
-        Cursor c = db.query(table_name, colunas, "nro_radio LIKE ? or nome LIKE ? ", busca, null, null, "_id ASC", null);
-
-        if (c == null) {
-            c.close();
-            return null;
-        } else if (!c.moveToFirst()) {
-            c.close();
-            return null;
-        }
-        return c;
-    }
-
-    public Cursor buscarPosicaoLotacao(double latitude, double longitude) {
-        SQLiteDatabase db = new DBUnidadePMAMHelper(ctx).getWritableDatabase();
-        String[] busca = new String[]{String.valueOf(latitude), String.valueOf(longitude)};
-
-        Cursor c = db.query(table_name, colunas, "latitude = ? and longitude = ?", busca, null, null, "_id ASC", null);
-
-        if (c == null) {
-            c.close();
-            db.close();
-            return null;
-        } else if (!c.moveToFirst()) {
-            c.close();
-            db.close();
-            return null;
-        }
-        return c;
-    }
-
-    public Cursor buscarLotcao(String _id) {
-
-        SQLiteDatabase db = new DBUnidadePMAMHelper(ctx).getWritableDatabase();
-
-        String[] busca = new String[]{_id};
-
-        Cursor c = db.query(table_name, colunas, "_id = ?", busca, null, null, null);
-
-        if (c == null) {
-            return null;
-        } else if (!c.moveToFirst()) {
-            c.close();
-            return null;
-        }
-        return c;
-
-
-    }
-
-    public String buscarIdUnidade(String ID_unidade) {
-
-        SQLiteDatabase db = new DBUnidadePMAMHelper(ctx).getWritableDatabase();
-
-        String[] busca = new String[]{ID_unidade};
-        String unidade;
-        Cursor c = db.query(table_name, colunas, "_id = ?", busca, null, null, null);
-
-        if (c == null) {
-            return null;
-        } else if (!c.moveToFirst()) {
-            c.close();
-            return null;
-        }
-        unidade = c.getString(c.getColumnIndex("nome"));
-        c.close();
-        return unidade;
-
-
-    }
-
-
-    public Cursor buscarTel(String txtbusca) {
-        String retono = "";
-        SQLiteDatabase db = new DBUnidadePMAMHelper(ctx).getWritableDatabase();
-
-        String[] busca = new String[]{txtbusca};
+        SQLiteDatabase db = null;
+        Cursor c = null;
         try {
-            Cursor c = db.query(table_name, colunas, "unidade = ?", busca, null, null, null);
-            if (c == null) {
+            db = new DBUnidadePMAMHelper(ctx).getWritableDatabase();
+            c = db.query(table_name, colunas, null, null, null, null, "_id ASC", null);
+            if (!c.moveToFirst()) {
                 return null;
-            } else if (!c.moveToFirst()) {
-                c.close();
-                return null;
-            } else {
-                return c;
             }
-        } catch (Exception e) {
+            return c;
+        } catch (SQLException e) {
+            e.printStackTrace();
             return null;
+        } finally {
+            // Não feche o cursor aqui, pois ele é retornado e usado externamente
+            if (db != null) db.close();
         }
     }
+
+
+    public Cursor buscarString(String codigo, String txtbusca) {
+        SQLiteDatabase db = null;
+        Cursor c = null;
+        try {
+            db = new DBUnidadePMAMHelper(ctx).getWritableDatabase();
+            String[] busca = new String[]{codigo, txtbusca};
+
+            c = db.query(table_name, colunas, "id_categoria = ? and cod_parent = ?", busca, null, null, "_id ASC", null);
+
+            if (!c.moveToFirst()) {
+                 c.close();
+                return null;
+            }
+            return c;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        } finally {
+            // Não feche o cursor aqui, pois ele é retornado e usado externamente
+            if (db != null) db.close();
+        }
+    }
+
+    public  List<lotacoesVO> buscarListOpm(String codigo, String txtbusca) {
+        SQLiteDatabase db = null;
+        Cursor c = null;
+        List<lotacoesVO>  list = new ArrayList<>();
+        try {
+            db = new DBUnidadePMAMHelper(ctx).getWritableDatabase();
+            String[] busca = new String[]{codigo, txtbusca};
+
+            c = db.query(table_name, colunas, "id_categoria = ? and cod_parent = ?", busca, null, null, "nome ASC", null);
+            if (c.moveToFirst()) {
+                do {
+                    lotacoesVO geo = new lotacoesVO();
+                    geo.setID(c.getInt(c.getColumnIndexOrThrow("_id")));
+                    geo.setNro_radio(c.getFloat(c.getColumnIndexOrThrow("nro_radio")));
+                    geo.setId_categoria(c.getInt(c.getColumnIndexOrThrow("id_categoria")));
+                    geo.setCod_parent(c.getInt(c.getColumnIndexOrThrow("cod_parent")));
+                    geo.setNomeLotacaoSuperior(c.getString(c.getColumnIndexOrThrow("nomeLotacaoSuperior")));
+                    geo.setNome(c.getString(c.getColumnIndexOrThrow("nome")));
+                    geo.setSigla(c.getString(c.getColumnIndexOrThrow("sigla")));
+                    geo.setEndereco(c.getString(c.getColumnIndexOrThrow("endereco")));
+                    geo.setDetalhes(c.getString(c.getColumnIndexOrThrow("descr")));
+                    geo.setEmail(c.getString(c.getColumnIndexOrThrow("email_institucional")));
+                    geo.setTel(c.getString(c.getColumnIndexOrThrow("fone1")));
+                    geo.setTelSA(c.getString(c.getColumnIndexOrThrow("fone2")));
+                    geo.setLat(c.getDouble(c.getColumnIndexOrThrow("latitude")));
+                    geo.setLng(c.getDouble(c.getColumnIndexOrThrow("longitude")));
+                    list.add(geo);
+                } while (c.moveToNext());
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            //  Considerar logar o erro ou lançar uma exceção personalizada
+        } finally {
+            if (c != null) {
+                c.close();
+            }
+            if (db != null) db.close();
+        }
+        return list;
+    }
+
 
     public boolean update(lotacoesVO geo, String ID) {
-        String[] update = new String[]{ID};
-        SQLiteDatabase db = new DBUnidadePMAMHelper(ctx).getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put("id_categoria", geo.getId_categoria());
-        values.put("cod_parent", geo.getCod_parent());
-        values.put("nomeLotacaoSuperior", geo.getNomeLotacaoSuperior());
-        values.put("nome", geo.getNome());
-        values.put("sigla", geo.getSigla());
-        values.put("endereco", geo.getEndereco());
-        values.put("descr", geo.getDetalhes());
-        values.put("email_institucional", geo.getEmail());
-        values.put("fone1", geo.getTel());
-        values.put("fone2", geo.getTelSA());
-        values.put("latitude", geo.getLat());
-        values.put("longitude", geo.getLng());
-        values.put("nro_radio", geo.getNro_radio());
-        if (db.update(table_name, values, "_id = ?", update) > 0) {
-            db.close();
-            return true;
-        } else {
+        SQLiteDatabase db = null;
+        try {
+            db = new DBUnidadePMAMHelper(ctx).getWritableDatabase();
+            ContentValues values = new ContentValues();
+            values.put("id_categoria", geo.getId_categoria());
+            values.put("cod_parent", geo.getCod_parent());
+            values.put("nomeLotacaoSuperior", geo.getNomeLotacaoSuperior());
+            values.put("nome", geo.getNome());
+            values.put("sigla", geo.getSigla());
+            values.put("endereco", geo.getEndereco());
+            values.put("descr", geo.getDetalhes());
+            values.put("email_institucional", geo.getEmail());
+            values.put("fone1", geo.getTel());
+            values.put("fone2", geo.getTelSA());
+            values.put("latitude", geo.getLat());
+            values.put("longitude", geo.getLng());
+            values.put("nro_radio", geo.getNro_radio());
+            String[] updateArgs = new String[]{ID};
+            return (db.update(table_name, values, "_id = ?", updateArgs) > 0);
+        } catch (SQLException e) {
+            e.printStackTrace();
             return false;
+        } finally {
+            if (db != null) {
+                db.close();
+            }
         }
     }
 
 
     public boolean update(dados geo, String ID) {
-        String[] update = new String[]{ID};
-        SQLiteDatabase db = new DBUnidadePMAMHelper(ctx).getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put("id_categoria", geo.getId_categoria());
-        values.put("cod_parent", geo.getID_PARENT());
-        values.put("nomeLotacaoSuperior", geo.getNomeLotacaoSuperior());
-        values.put("nome", geo.getNOME());
-        values.put("sigla", geo.getSigla());
-        values.put("endereco", geo.getEndereco());
-        values.put("descr", geo.getDescricao());
-        values.put("email_institucional", geo.getEmail_institucional());
-        values.put("fone1", geo.getFone1());
-        values.put("fone2", geo.getFone2());
-        values.put("latitude", geo.getLatitude());
-        values.put("longitude", geo.getLongitude());
-        values.put("nro_radio", geo.getNro_radio());
-        return  (db.update(table_name, values, "_id = ?", update) > 0);
+        SQLiteDatabase db = null;
+        try {
+            db = new DBUnidadePMAMHelper(ctx).getWritableDatabase();
+            ContentValues values = new ContentValues();
+            values.put("id_categoria", geo.getId_categoria());
+            values.put("cod_parent", geo.getID_PARENT());
+            values.put("nomeLotacaoSuperior", geo.getNomeLotacaoSuperior());
+            values.put("nome", geo.getNOME());
+            values.put("sigla", geo.getSigla());
+            values.put("endereco", geo.getEndereco());
+            values.put("descr", geo.getDescricao());
+            values.put("email_institucional", geo.getEmail_institucional());
+            values.put("fone1", geo.getFone1());
+            values.put("fone2", geo.getFone2());
+            values.put("latitude", geo.getLatitude());
+            values.put("longitude", geo.getLongitude());
+            values.put("nro_radio", geo.getNro_radio());
+            String[] updateArgs = new String[]{ID};
+            return (db.update(table_name, values, "_id = ?", updateArgs) > 0);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            if (db != null) db.close();
+        }
     }
 
     public boolean deletaTudo() {
-
-        SQLiteDatabase db = new DBUnidadePMAMHelper(ctx).getWritableDatabase();
-        return (db.delete(table_name, null, null) > 0);
+        SQLiteDatabase db = null;
+        try {
+            db = new DBUnidadePMAMHelper(ctx).getWritableDatabase();
+            return (db.delete(table_name, null, null) > 0);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            if (db != null) db.close();
+        }
     }
 
     public int tamDb() {
-        int tam;
-        SQLiteDatabase db = new DBUnidadePMAMHelper(ctx).getWritableDatabase();
-        Cursor cursor = db.query(table_name, colunas, null, null, null, null, null);
-        tam = cursor.getCount();
-        db.close();
-        cursor.close();
+        int tam = 0;
+        SQLiteDatabase db = null;
+        Cursor cursor = null;
+        try {
+            db = new DBUnidadePMAMHelper(ctx).getReadableDatabase(); // Use getReadableDatabase para operações de leitura
+            cursor = db.query(table_name, new String[]{"COUNT(*)"}, null, null, null, null, null);
+            if (cursor.moveToFirst()) {
+                tam = cursor.getInt(0);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            if (cursor != null) cursor.close();
+            if (db != null) db.close();
+        }
         return tam;
     }
 
     public List<lotacoesVO> lista() {
-
         List<lotacoesVO> lista = new ArrayList<lotacoesVO>();
+        SQLiteDatabase db = null;
+        Cursor c = null;
         try {
-            SQLiteDatabase db = new DBUnidadePMAMHelper(ctx).getWritableDatabase();
-            Cursor c = db.query(table_name, colunas, null, null, null, null, null);
-			if (c == null) {
-				db.close();
-				return null;
-			} else if (!c.moveToFirst()) {
-				c.close();
-				db.close();
-				return null;
-			}
-            while (c.moveToNext()) {
-                lotacoesVO geo = new lotacoesVO();
-                geo.setID(c.getInt(c.getColumnIndex("_id")));
-				geo.setNro_radio(c.getFloat(c.getColumnIndex("nro_radio")));
-                geo.setId_categoria(c.getInt(c.getColumnIndex("id_categoria")));
-                geo.setId_categoria(c.getInt(c.getColumnIndex("cod_parent")));
-                geo.setNomeLotacaoSuperior(c.getString(c.getColumnIndex("nomeLotacaoSuperior")));
-                geo.setNome(c.getString(c.getColumnIndex("nome")));
-                geo.setEndereco(c.getString(c.getColumnIndex("endereco")));
-                geo.setDetalhes(c.getString(c.getColumnIndex("descr")));
-                geo.setEmail(c.getString(c.getColumnIndex("email_institucional")));
-                geo.setTel(c.getString(c.getColumnIndex("fone1")));
-                geo.setTelSA(c.getString(c.getColumnIndex("fone2")));
-                geo.setLat(c.getInt(c.getColumnIndex("latitude")));
-                geo.setLng(c.getInt(c.getColumnIndex("longitude")));
-                lista.add(geo);
+            db = new DBUnidadePMAMHelper(ctx).getReadableDatabase(); // Use getReadableDatabase para leitura
+            c = db.query(table_name, colunas, null, null, null, null, "_id ASC"); // Adicionado ordenação
+
+            if (c.moveToFirst()) {
+                do {
+                    lotacoesVO geo = new lotacoesVO();
+                    geo.setID(c.getInt(c.getColumnIndexOrThrow("_id")));
+                    geo.setNro_radio(c.getFloat(c.getColumnIndexOrThrow("nro_radio")));
+                    geo.setId_categoria(c.getInt(c.getColumnIndexOrThrow("id_categoria")));
+                    // Corrigido: Estava setando id_categoria duas vezes. Assumindo que o segundo era para cod_parent.
+                    geo.setCod_parent(c.getInt(c.getColumnIndexOrThrow("cod_parent")));
+                    geo.setNomeLotacaoSuperior(c.getString(c.getColumnIndexOrThrow("nomeLotacaoSuperior")));
+                    geo.setNome(c.getString(c.getColumnIndexOrThrow("nome")));
+                    geo.setSigla(c.getString(c.getColumnIndexOrThrow("sigla"))); // Adicionado sigla
+                    geo.setEndereco(c.getString(c.getColumnIndexOrThrow("endereco")));
+                    geo.setDetalhes(c.getString(c.getColumnIndexOrThrow("descr")));
+                    geo.setEmail(c.getString(c.getColumnIndexOrThrow("email_institucional")));
+                    geo.setTel(c.getString(c.getColumnIndexOrThrow("fone1")));
+                    geo.setTelSA(c.getString(c.getColumnIndexOrThrow("fone2")));
+                    geo.setLat(c.getDouble(c.getColumnIndexOrThrow("latitude"))); // Alterado para getDouble
+                    geo.setLng(c.getDouble(c.getColumnIndexOrThrow("longitude"))); // Alterado para getDouble
+                    lista.add(geo);
+                } while (c.moveToNext());
             }
-			c.close();
-			db.close();
         } catch (Exception e) {
             e.printStackTrace();
+            // Considere logar o erro ou lançar uma exceção personalizada
+        } finally {
+            if (c != null) {
+                c.close();
+            }
+            if (db != null) {
+                db.close();
+            }
         }
         return lista;
     }
 
     public lotacoesVO getLotacao(int ID) {
+        SQLiteDatabase db = null;
+        Cursor c = null;
+        lotacoesVO geo = null;
+        try {
+            db = new DBUnidadePMAMHelper(ctx).getReadableDatabase(); // Use getReadableDatabase para leitura
+            c = db.query(table_name, colunas, "_id = ?", new String[]{String.valueOf(ID)}, null, null, null, null);
 
-
-        SQLiteDatabase db = new DBUnidadePMAMHelper(ctx).getWritableDatabase();
-        Cursor c = db.query(table_name, colunas, "_id = ?", new String[]{String.valueOf(ID)}, null, null, null, null);
-        if (c == null) {
-            return null;
-        } else if (!c.moveToFirst()) {
-            c.close();
-            return null;
+            if (c.moveToFirst()) {
+                geo = new lotacoesVO();
+                geo.setID(c.getInt(c.getColumnIndexOrThrow("_id")));
+                geo.setNro_radio(c.getFloat(c.getColumnIndexOrThrow("nro_radio")));
+                geo.setId_categoria(c.getInt(c.getColumnIndexOrThrow("id_categoria")));
+                // Corrigido: Estava setando id_categoria duas vezes. Assumindo que o segundo era para cod_parent.
+                geo.setCod_parent(c.getInt(c.getColumnIndexOrThrow("cod_parent")));
+                geo.setNomeLotacaoSuperior(c.getString(c.getColumnIndexOrThrow("nomeLotacaoSuperior")));
+                geo.setNome(c.getString(c.getColumnIndexOrThrow("nome")));
+                geo.setSigla(c.getString(c.getColumnIndexOrThrow("sigla"))); // Adicionado sigla
+                geo.setEndereco(c.getString(c.getColumnIndexOrThrow("endereco")));
+                geo.setDetalhes(c.getString(c.getColumnIndexOrThrow("descr")));
+                geo.setEmail(c.getString(c.getColumnIndexOrThrow("email_institucional")));
+                geo.setTel(c.getString(c.getColumnIndexOrThrow("fone1")));
+                geo.setTelSA(c.getString(c.getColumnIndexOrThrow("fone2")));
+                geo.setLat(c.getDouble(c.getColumnIndexOrThrow("latitude")));
+                geo.setLng(c.getDouble(c.getColumnIndexOrThrow("longitude")));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            // Considere logar o erro ou lançar uma exceção personalizada
+        } finally {
+            if (c != null) {
+                c.close();
+            }
+            if (db != null) {
+                db.close();
+            }
         }
-        lotacoesVO geo = new lotacoesVO();
-		geo.setID(c.getInt(c.getColumnIndex("_id")));
-		geo.setNro_radio(c.getFloat(c.getColumnIndex("nro_radio")));
-        geo.setId_categoria(c.getInt(c.getColumnIndex("id_categoria")));
-        geo.setId_categoria(c.getInt(c.getColumnIndex("cod_parent")));
-        geo.setNomeLotacaoSuperior(c.getString(c.getColumnIndex("nomeLotacaoSuperior")));
-        geo.setNome(c.getString(c.getColumnIndex("nome")));
-        geo.setEndereco(c.getString(c.getColumnIndex("endereco")));
-        geo.setDetalhes(c.getString(c.getColumnIndex("descr")));
-        geo.setEmail(c.getString(c.getColumnIndex("email_institucional")));
-        geo.setTel(c.getString(c.getColumnIndex("fone1")));
-        geo.setTelSA(c.getString(c.getColumnIndex("fone2")));
-        geo.setLat(c.getDouble(c.getColumnIndex("latitude")));
-        geo.setLng(c.getDouble(c.getColumnIndex("longitude")));
-        c.close();
         return geo;
-
-
     }
 
-    public String getUnidadeNome(int codgeo) {
-
-
-        String codretorn = Integer.toString(codgeo);
-        boolean tiporetorn = false;
-        try {
-            SQLiteDatabase db = new DBUnidadePMAMHelper(ctx).getWritableDatabase();
-
-            String[] busca = new String[]{codretorn};
-
-            Cursor c = db.query(table_name, colunas, "_id = ?", busca, null, null, null, null);
-            lotacoesVO geo = new lotacoesVO();
-            while (c.moveToNext()) {
-                geo.setNome(c.getString(c.getColumnIndex("nome")));
-            }
-            db.close();
-            c.close();
-            return geo.getNome();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return "";
-        }
-    }
-
-    public String getSigla(int codgeo) {
-
-
-        String codretorn = Integer.toString(codgeo);
-        try {
-            SQLiteDatabase db = new DBUnidadePMAMHelper(ctx).getWritableDatabase();
-
-            String[] busca = new String[]{codretorn};
-
-            Cursor c = db.query(table_name, colunas, "_id = ?", busca, null, null, null, null);
-            if (c == null) {
-                return "";
-            } else if (!c.moveToFirst()) {
-                c.close();
-                return "";
-            } else {
-                String sigle = c.getString(c.getColumnIndex("sigla"));
-                c.close();
-                return sigle;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            return "";
-        }
-    }
-
-    public String getCodigo(String name) {
-
-        String[] busca = new String[]{name};
-        String nome;
-        try {
-            SQLiteDatabase db = new DBUnidadePMAMHelper(ctx).getWritableDatabase();
-
-            Cursor c = db.query(table_name, colunas, "nome = ?", busca, null, null, null, null);
-            if (c == null) {
-                return null;
-            } else if (!c.moveToFirst()) {
-                c.close();
-                return null;
-            } else {
-                nome = c.getString(c.getColumnIndex("_id"));
-                c.close();
-                return nome;
-            }
-        } catch (Exception e) {
-            return null;
-        }
-    }
-
-    public Cursor getCursorForName(String name) {
-
-        String[] busca = new String[]{name};
-        try {
-            SQLiteDatabase db = new DBUnidadePMAMHelper(ctx).getWritableDatabase();
-
-            Cursor c = db.query(table_name, colunas, "nome = ?", busca, null, null, null, null);
-            if (c == null) {
-                return null;
-            } else if (!c.moveToFirst()) {
-                c.close();
-                return null;
-            } else {
-                return c;
-            }
-        } catch (Exception e) {
-            return null;
-        }
-    }
 
 	public ArrayList<lotacoesVO> buscarTudocod(int cod) {
-		ArrayList<lotacoesVO> lista = new ArrayList<lotacoesVO>();
-		try {
-		SQLiteDatabase db = new DBUnidadePMAMHelper(ctx).getWritableDatabase();
-		String[] busca = new String[]{String.valueOf(cod)};
-		Cursor c = db.query(table_name, colunas, "id_categoria = ?", busca, null, null, "nro_radio ASC", null);
-		if (c == null) {
-			db.close();
-			return null;
-		} else if (!c.moveToFirst()) {
-			c.close();
-			db.close();
-			return null;
-		}
-		while (c.moveToNext()) {
-			lotacoesVO geo = new lotacoesVO();
-			geo.setID(c.getInt(c.getColumnIndex("_id")));
-			geo.setNro_radio(c.getFloat(c.getColumnIndex("nro_radio")));
-			geo.setId_categoria(c.getInt(c.getColumnIndex("id_categoria")));
-			geo.setCod_parent(c.getInt(c.getColumnIndex("cod_parent")));
-			geo.setNomeLotacaoSuperior(c.getString(c.getColumnIndex("nomeLotacaoSuperior")));
-			geo.setNome(c.getString(c.getColumnIndex("nome")));
-			geo.setEndereco(c.getString(c.getColumnIndex("endereco")));
-			geo.setDetalhes(c.getString(c.getColumnIndex("descr")));
-			geo.setEmail(c.getString(c.getColumnIndex("email_institucional")));
-			geo.setTel(c.getString(c.getColumnIndex("fone1")));
-			geo.setTelSA(c.getString(c.getColumnIndex("fone2")));
-			geo.setLat(c.getInt(c.getColumnIndex("latitude")));
-			geo.setLng(c.getInt(c.getColumnIndex("longitude")));
-			lista.add(geo);
-		}
-		c.close();
-		db.close();
-	} catch (Exception e) {
-		e.printStackTrace();
-	}
-        return lista;
+        ArrayList<lotacoesVO> lista = new ArrayList<>();
+        SQLiteDatabase db = null;
+        Cursor c = null;
+        try {
+            db = new DBUnidadePMAMHelper(ctx).getWritableDatabase();
+            String[] busca = new String[]{String.valueOf(cod)};
+            c = db.query(table_name, colunas, "id_categoria = ?", busca, null, null, "nro_radio ASC", null);
 
+            if (c.moveToFirst()) {
+                do {
+                    lotacoesVO geo = new lotacoesVO();
+                    geo.setID(c.getInt(c.getColumnIndexOrThrow("_id")));
+                    geo.setNro_radio(c.getFloat(c.getColumnIndexOrThrow("nro_radio")));
+                    geo.setId_categoria(c.getInt(c.getColumnIndexOrThrow("id_categoria")));
+                    geo.setCod_parent(c.getInt(c.getColumnIndexOrThrow("cod_parent")));
+                    geo.setNomeLotacaoSuperior(c.getString(c.getColumnIndexOrThrow("nomeLotacaoSuperior")));
+                    geo.setNome(c.getString(c.getColumnIndexOrThrow("nome")));
+                    geo.setSigla(c.getString(c.getColumnIndexOrThrow("sigla")));
+                    geo.setEndereco(c.getString(c.getColumnIndexOrThrow("endereco")));
+                    geo.setDetalhes(c.getString(c.getColumnIndexOrThrow("descr")));
+                    geo.setEmail(c.getString(c.getColumnIndexOrThrow("email_institucional")));
+                    geo.setTel(c.getString(c.getColumnIndexOrThrow("fone1")));
+                    geo.setTelSA(c.getString(c.getColumnIndexOrThrow("fone2")));
+                    geo.setLat(c.getDouble(c.getColumnIndexOrThrow("latitude")));
+                    geo.setLng(c.getDouble(c.getColumnIndexOrThrow("longitude")));
+                    lista.add(geo);
+                } while (c.moveToNext());
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            // Considere logar o erro ou lançar uma exceção personalizada
+        } finally {
+            if (c != null) {
+                c.close();
+            }
+            if (db != null) {
+                db.close();
+            }
+        }
+        return lista;
 	}
 }

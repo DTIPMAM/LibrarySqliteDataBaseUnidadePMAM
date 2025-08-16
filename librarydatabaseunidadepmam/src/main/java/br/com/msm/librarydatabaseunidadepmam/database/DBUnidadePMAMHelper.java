@@ -94,7 +94,7 @@ public class DBUnidadePMAMHelper extends SQLiteOpenHelper {
 
             res = db.rawQuery("Select * from " + tableName + " limit 1", null);
 
-            int colIndex = res.getColumnIndex(fieldName);
+            int colIndex = res.getColumnIndexOrThrow(fieldName);
             if (colIndex != -1) {
                 isExist = true;
             }
