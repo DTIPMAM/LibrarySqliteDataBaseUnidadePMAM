@@ -7,6 +7,26 @@ import android.os.Parcelable;
 import com.google.gson.JsonObject;
 
 public class lotacoesVO implements Parcelable {
+    @Override
+    public String toString() {
+        return "lotacoesVO{" +
+                "ID=" + ID +
+                ", id_categoria=" + id_categoria +
+                ", cod_parent=" + cod_parent +
+                ", nomeLotacaoSuperior='" + nomeLotacaoSuperior + '\'' +
+                ", nome='" + nome + '\'' +
+                ", sigla='" + sigla + '\'' +
+                ", endereco='" + endereco + '\'' +
+                ", email='" + email + '\'' +
+                ", tel='" + tel + '\'' +
+                ", telSA='" + telSA + '\'' +
+                ", detalhes='" + detalhes + '\'' +
+                ", lng=" + lng +
+                ", lat=" + lat +
+                ", nro_radio=" + nro_radio +
+                ", distancia='" + distancia + '\'' +
+                '}';
+    }
 
     public static final Creator<lotacoesVO>
             CREATOR = new Creator<lotacoesVO>() {
@@ -71,6 +91,25 @@ public class lotacoesVO implements Parcelable {
         this.nro_radio = vo.getNro_radio();
         this.distancia = vo.getDistancia();
     }
+
+
+    public lotacoesVO(dados vo) {
+        this.ID = vo.getID() != null && !vo.getID().isEmpty() ? Integer.parseInt(vo.getID()) : 0;
+        this.id_categoria = vo.getId_categoria() != null && !vo.getId_categoria().isEmpty() ? Integer.parseInt(vo.getId_categoria()) : 0;
+        this.cod_parent = vo.getID_PARENT() != null && !vo.getID_PARENT().isEmpty() ? Integer.parseInt(vo.getID_PARENT()) : 0;
+        this.nomeLotacaoSuperior = vo.getNomeLotacaoSuperior();
+        this.nome = vo.getNOME();
+        this.sigla = vo.getSigla();
+        this.endereco = vo.getEndereco();
+        this.email = vo.getEmail_institucional();
+        this.tel = vo.getFone1();
+        this.telSA = vo.getFone2();
+        this.detalhes = vo.getDescricao();
+        this.lng = vo.getLongitude() != null && !vo.getLongitude().isEmpty() ? Double.parseDouble(vo.getLongitude()) : 0.0;
+        this.lat = vo.getLatitude() != null && !vo.getLatitude().isEmpty() ? Double.parseDouble(vo.getLatitude()) : 0.0;
+        this.nro_radio = vo.getNro_radio() != null && !vo.getNro_radio().isEmpty() ? Float.parseFloat(vo.getNro_radio()) : 0.0f;
+    }
+
 
     public lotacoesVO(JsonObject js) {
         //  "_id", "id_categoria", "cod_parent","nomeLotacaoSuperior", "nome","endereco",
@@ -250,27 +289,6 @@ public class lotacoesVO implements Parcelable {
     @Override
     public int describeContents() {
         return 0;
-    }
-
-    @Override
-    public String toString() {
-        return "lotacoesVO{" +
-                "ID=" + ID +
-                ", id_categoria=" + id_categoria +
-                ", cod_parent=" + cod_parent +
-                ", nomeLotacaoSuperior='" + nomeLotacaoSuperior + '\'' +
-                ", nome='" + nome + '\'' +
-                ", sigla='" + sigla + '\'' +
-                ", endereco='" + endereco + '\'' +
-                ", email='" + email + '\'' +
-                ", tel='" + tel + '\'' +
-                ", telSA='" + telSA + '\'' +
-                ", detalhes='" + detalhes + '\'' +
-                ", lng=" + lng +
-                ", lat=" + lat +
-                ", nro_radio=" + nro_radio +
-                ", distancia='" + distancia + '\'' +
-                '}';
     }
 
     @Override

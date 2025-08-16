@@ -4,8 +4,7 @@ import java.util.List;
 
 import br.com.msm.librarydatabaseunidadepmam.classes_vo.lotacoesVO;
 
-public interface resultUpdate {
+public interface iLotacao {
 
-	public void setResult(String result);
-
+	public void setLotacoes(List<lotacoesVO> result, String erro);
 }
