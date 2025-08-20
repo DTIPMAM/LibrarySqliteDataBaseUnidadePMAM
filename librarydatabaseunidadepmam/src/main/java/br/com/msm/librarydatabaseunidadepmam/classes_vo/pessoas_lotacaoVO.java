@@ -3,6 +3,7 @@ package br.com.msm.librarydatabaseunidadepmam.classes_vo;
 
 public class pessoas_lotacaoVO {
 
+    private int _id;
     private int id_unidade;
     private String nomeLotacaoSuperior;
     private String pessoa_nome;
@@ -23,7 +24,9 @@ public class pessoas_lotacaoVO {
     @Override
     public String toString() {
         return "pessoas_lotacaoVO{" +
-                "id_unidade=" + id_unidade +
+                "_id=" + _id +
+                ", id_unidade=" + id_unidade +
+                ", id_unidade=" + id_unidade +
                 ", nomeLotacaoSuperior='" + nomeLotacaoSuperior + '\'' +
                 ", pessoa_nome='" + pessoa_nome + '\'' +
                 ", funcao='" + funcao + '\'' +
@@ -31,12 +34,12 @@ public class pessoas_lotacaoVO {
                 '}';
     }
 
-    public String getNomeLotacaoSuperior() {
-        return nomeLotacaoSuperior;
+    public int get_id() {
+        return _id;
     }
 
-    public void setNomeLotacaoSuperior(String nomeLotacaoSuperior) {
-        this.nomeLotacaoSuperior = nomeLotacaoSuperior;
+    public void set_id(int _id) {
+        this._id = _id;
     }
 
     public int getId_unidade() {
@@ -47,12 +50,20 @@ public class pessoas_lotacaoVO {
         this.id_unidade = id_unidade;
     }
 
-    public String getTelefone_corporativo() {
-        return telefone_corporativo;
+    public String getNomeLotacaoSuperior() {
+        return nomeLotacaoSuperior;
     }
 
-    public void setTelefone_corporativo(String telefone_corporativo) {
-        this.telefone_corporativo = telefone_corporativo;
+    public void setNomeLotacaoSuperior(String nomeLotacaoSuperior) {
+        this.nomeLotacaoSuperior = nomeLotacaoSuperior;
+    }
+
+    public String getPessoa_nome() {
+        return pessoa_nome;
+    }
+
+    public void setPessoa_nome(String pessoa_nome) {
+        this.pessoa_nome = pessoa_nome;
     }
 
     public String getFuncao() {
@@ -63,11 +74,11 @@ public class pessoas_lotacaoVO {
         this.funcao = funcao;
     }
 
-    public String getPessoa_nome() {
-        return pessoa_nome;
+    public String getTelefone_corporativo() {
+        return telefone_corporativo;
     }
 
-    public void setPessoa_nome(String pessoa_nome) {
-        this.pessoa_nome = pessoa_nome;
+    public void setTelefone_corporativo(String telefone_corporativo) {
+        this.telefone_corporativo = telefone_corporativo;
     }
 }

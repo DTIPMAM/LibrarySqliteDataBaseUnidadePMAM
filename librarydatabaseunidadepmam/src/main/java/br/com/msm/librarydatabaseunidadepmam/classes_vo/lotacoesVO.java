@@ -10,7 +10,7 @@ public class lotacoesVO implements Parcelable {
     @Override
     public String toString() {
         return "lotacoesVO{" +
-                "ID=" + ID +
+                "ID=" + _id +
                 ", id_categoria=" + id_categoria +
                 ", cod_parent=" + cod_parent +
                 ", nomeLotacaoSuperior='" + nomeLotacaoSuperior + '\'' +
@@ -39,11 +39,11 @@ public class lotacoesVO implements Parcelable {
             return new lotacoesVO[size];
         }
     };
-    private int ID;
+    private int _id;
     private int id_categoria;
 
     public lotacoesVO(int ID, int id_categoria, int cod_parent, String nomeLotacaoSuperior, String nome, String sigla, String endereco, String email, String tel, String telSA, String detalhes, double lng, double lat, float nro_radio, String distancia) {
-        this.ID = ID;
+        this._id = ID;
         this.id_categoria = id_categoria;
         this.cod_parent = cod_parent;
         this.nomeLotacaoSuperior = nomeLotacaoSuperior;
@@ -75,7 +75,7 @@ public class lotacoesVO implements Parcelable {
     private String distancia;
 
     public lotacoesVO(lotacoesVO vo) {
-        this.ID = vo.getID();
+        this._id = vo.get_id();
         this.id_categoria = vo.getId_categoria();
         this.cod_parent = vo.getCod_parent();
         this.nomeLotacaoSuperior = vo.getNomeLotacaoSuperior();
@@ -94,7 +94,7 @@ public class lotacoesVO implements Parcelable {
 
 
     public lotacoesVO(dados vo) {
-        this.ID = vo.getID() != null && !vo.getID().isEmpty() ? Integer.parseInt(vo.getID()) : 0;
+        this._id = vo.getID() != null && !vo.getID().isEmpty() ? Integer.parseInt(vo.getID()) : 0;
         this.id_categoria = vo.getId_categoria() != null && !vo.getId_categoria().isEmpty() ? Integer.parseInt(vo.getId_categoria()) : 0;
         this.cod_parent = vo.getID_PARENT() != null && !vo.getID_PARENT().isEmpty() ? Integer.parseInt(vo.getID_PARENT()) : 0;
         this.nomeLotacaoSuperior = vo.getNomeLotacaoSuperior();
@@ -114,7 +114,7 @@ public class lotacoesVO implements Parcelable {
     public lotacoesVO(JsonObject js) {
         //  "_id", "id_categoria", "cod_parent","nomeLotacaoSuperior", "nome","endereco",
         //            "descr","email_institucional","fone1","fone2", "latitude", "longitude","nro_radio", "sigla"};
-        this.ID = js.has("_id") && !js.get("_id").isJsonNull() && !js.get("_id").getAsString().isEmpty() ? Integer.parseInt(js.get("_id").getAsString()) : 0;
+        this._id = js.has("_id") && !js.get("_id").isJsonNull() && !js.get("_id").getAsString().isEmpty() ? Integer.parseInt(js.get("_id").getAsString()) : 0;
 
         this.id_categoria = js.has("id_categoria") && !js.get("id_categoria").isJsonNull() && !js.get("id_categoria").getAsString().isEmpty() ? Integer.parseInt(js.get("id_categoria").getAsString()) : 0;
 
@@ -146,7 +146,7 @@ public class lotacoesVO implements Parcelable {
     }
 
     public lotacoesVO(Parcel in) {
-        this.ID = in.readInt();
+        this._id = in.readInt();
         this.id_categoria = in.readInt();
         this.cod_parent = in.readInt();
         this.nomeLotacaoSuperior = in.readString();
@@ -198,12 +198,12 @@ public class lotacoesVO implements Parcelable {
         this.detalhes = detalhes;
     }
 
-    public int getID() {
-        return ID;
+    public int get_id() {
+        return _id;
     }
 
-    public void setID(int ID) {
-        this.ID = ID;
+    public void set_id(int _id) {
+        this._id = _id;
     }
 
     public String getEndereco() {
@@ -293,7 +293,7 @@ public class lotacoesVO implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(ID);
+        dest.writeInt(_id);
         dest.writeInt(id_categoria);
         dest.writeInt(cod_parent);
         dest.writeString(nomeLotacaoSuperior);

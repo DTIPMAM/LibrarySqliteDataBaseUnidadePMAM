@@ -114,7 +114,7 @@ public class pessoas_lotacaoDAO {
         try {
             db = new DBUnidadePMAMHelper(ctx).getWritableDatabase();
             c = db.query(table_name, colunas, "pessoa_nome = ?", busca, null, null, null);
-            return c != null && c.moveToFirst();
+            return c.moveToFirst();
         } catch (SQLException e) {
             // Log the error or handle it as needed
             return false;
@@ -240,12 +240,13 @@ public class pessoas_lotacaoDAO {
                 return null;
             }
             geo = new pessoas_lotacaoVO();
+            geo.set_id(c.getInt(c.getColumnIndexOrThrow("_id")));
             geo.setId_unidade(c.getInt(c.getColumnIndexOrThrow("id_unidade")));
             geo.setPessoa_nome(c.getString(c.getColumnIndexOrThrow("pessoa_nome")));
             geo.setFuncao(c.getString(c.getColumnIndexOrThrow("funcao")));
             geo.setTelefone_corporativo(c.getString(c.getColumnIndexOrThrow("telefone_corporativo")));
         } catch (Exception e) {
-            e.printStackTrace();
+              LogD(new Throwable(), e.getMessage());
         } finally {
             if (c != null) {
                 c.close();
@@ -270,6 +271,7 @@ public class pessoas_lotacaoDAO {
 
             while (c.moveToNext()) {
                 pessoas_lotacaoVO geo = new pessoas_lotacaoVO();
+                geo.set_id(c.getInt(c.getColumnIndexOrThrow("_id")));
                 geo.setId_unidade(c.getInt(c.getColumnIndexOrThrow("id_unidade")));
                 geo.setPessoa_nome(c.getString(c.getColumnIndexOrThrow("pessoa_nome")));
                 geo.setFuncao(c.getString(c.getColumnIndexOrThrow("funcao")));
@@ -277,7 +279,7 @@ public class pessoas_lotacaoDAO {
                 lista.add(geo);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LogD(new Throwable(), e.getMessage());
         } finally {
             if (c != null) {
                 c.close();
@@ -301,6 +303,7 @@ public class pessoas_lotacaoDAO {
 
             while (c.moveToNext()) {
                 pessoas_lotacaoVO geo = new pessoas_lotacaoVO();
+                geo.set_id(c.getInt(c.getColumnIndexOrThrow("_id")));
                 geo.setId_unidade(c.getInt(c.getColumnIndexOrThrow("id_unidade")));
                 geo.setPessoa_nome(c.getString(c.getColumnIndexOrThrow("pessoa_nome")));
                 geo.setFuncao(c.getString(c.getColumnIndexOrThrow("funcao")));
@@ -332,6 +335,7 @@ public class pessoas_lotacaoDAO {
             c = db.query(table_name, colunas, "id_unidade = ? and funcao = ?", busca, null, null, null);
             while (c.moveToNext()) {
                 pessoas_lotacaoVO geo = new pessoas_lotacaoVO();
+                geo.set_id(c.getInt(c.getColumnIndexOrThrow("_id")));
                 geo.setId_unidade(c.getInt(c.getColumnIndexOrThrow("id_unidade")));
                 geo.setPessoa_nome(c.getString(c.getColumnIndexOrThrow("pessoa_nome")));
                 geo.setFuncao(c.getString(c.getColumnIndexOrThrow("funcao")));
@@ -367,6 +371,7 @@ public class pessoas_lotacaoDAO {
 
 
             pessoa = new pessoas_lotacaoVO();
+            pessoa.set_id(c.getInt(c.getColumnIndexOrThrow("_id")));
             pessoa.setId_unidade(c.getInt(c.getColumnIndexOrThrow("id_unidade")));
             pessoa.setPessoa_nome(c.getString(c.getColumnIndexOrThrow("pessoa_nome")));
             pessoa.setFuncao(c.getString(c.getColumnIndexOrThrow("funcao")));

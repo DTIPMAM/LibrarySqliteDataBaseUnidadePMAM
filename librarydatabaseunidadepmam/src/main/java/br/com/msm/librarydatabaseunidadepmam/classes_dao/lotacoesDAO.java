@@ -32,7 +32,7 @@ public class lotacoesDAO {
         try {
             db = new DBUnidadePMAMHelper(ctx).getWritableDatabase();
             ContentValues values = new ContentValues();
-            values.put("_id", lotacao.getID());
+            values.put("_id", lotacao.get_id());
             values.put("id_categoria", lotacao.getId_categoria());
             values.put("cod_parent", lotacao.getCod_parent());
             values.put("nomeLotacaoSuperior", lotacao.getNomeLotacaoSuperior());
@@ -150,7 +150,7 @@ public class lotacoesDAO {
             if (c.moveToFirst()) {
                 do {
                     lotacoesVO geo = new lotacoesVO();
-                    geo.setID(c.getInt(c.getColumnIndexOrThrow("_id")));
+                    geo.set_id(c.getInt(c.getColumnIndexOrThrow("_id")));
                     geo.setNro_radio(c.getFloat(c.getColumnIndexOrThrow("nro_radio")));
                     geo.setId_categoria(c.getInt(c.getColumnIndexOrThrow("id_categoria")));
                     geo.setCod_parent(c.getInt(c.getColumnIndexOrThrow("cod_parent")));
@@ -282,7 +282,7 @@ public class lotacoesDAO {
             if (c.moveToFirst()) {
                 do {
                     lotacoesVO geo = new lotacoesVO();
-                    geo.setID(c.getInt(c.getColumnIndexOrThrow("_id")));
+                    geo.set_id(c.getInt(c.getColumnIndexOrThrow("_id")));
                     geo.setNro_radio(c.getFloat(c.getColumnIndexOrThrow("nro_radio")));
                     geo.setId_categoria(c.getInt(c.getColumnIndexOrThrow("id_categoria")));
                     // Corrigido: Estava setando id_categoria duas vezes. Assumindo que o segundo era para cod_parent.
@@ -324,7 +324,7 @@ public class lotacoesDAO {
 
             if (c.moveToFirst()) {
                 geo = new lotacoesVO();
-                geo.setID(c.getInt(c.getColumnIndexOrThrow("_id")));
+                geo.set_id(c.getInt(c.getColumnIndexOrThrow("_id")));
                 geo.setNro_radio(c.getFloat(c.getColumnIndexOrThrow("nro_radio")));
                 geo.setId_categoria(c.getInt(c.getColumnIndexOrThrow("id_categoria")));
                 // Corrigido: Estava setando id_categoria duas vezes. Assumindo que o segundo era para cod_parent.
@@ -367,7 +367,7 @@ public class lotacoesDAO {
             if (c.moveToFirst()) {
                 do {
                     lotacoesVO geo = new lotacoesVO();
-                    geo.setID(c.getInt(c.getColumnIndexOrThrow("_id")));
+                    geo.set_id(c.getInt(c.getColumnIndexOrThrow("_id")));
                     geo.setNro_radio(c.getFloat(c.getColumnIndexOrThrow("nro_radio")));
                     geo.setId_categoria(c.getInt(c.getColumnIndexOrThrow("id_categoria")));
                     geo.setCod_parent(c.getInt(c.getColumnIndexOrThrow("cod_parent")));
