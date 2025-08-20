@@ -125,7 +125,7 @@ public class lotacoesDAO {
             c = db.query(table_name, colunas, "id_categoria = ? and cod_parent = ?", busca, null, null, "_id ASC", null);
 
             if (!c.moveToFirst()) {
-                 c.close();
+                c.close();
                 return null;
             }
             return c;
@@ -138,10 +138,10 @@ public class lotacoesDAO {
         }
     }
 
-    public  List<lotacoesVO> buscarListOpm(String codigo, String txtbusca) {
+    public List<lotacoesVO> buscarListOpm(String codigo, String txtbusca) {
         SQLiteDatabase db = null;
         Cursor c = null;
-        List<lotacoesVO>  list = new ArrayList<>();
+        List<lotacoesVO> list = new ArrayList<>();
         try {
             db = new DBUnidadePMAMHelper(ctx).getWritableDatabase();
             String[] busca = new String[]{codigo, txtbusca};
@@ -355,7 +355,7 @@ public class lotacoesDAO {
     }
 
 
-	public ArrayList<lotacoesVO> buscarTudocod(int cod) {
+    public ArrayList<lotacoesVO> buscarTudocod(int cod) {
         ArrayList<lotacoesVO> lista = new ArrayList<>();
         SQLiteDatabase db = null;
         Cursor c = null;
@@ -396,5 +396,30 @@ public class lotacoesDAO {
             }
         }
         return lista;
-	}
+    }
+
+
+    public String getCodigo(String name) {
+        SQLiteDatabase db = null;
+        Cursor c = null;
+        String codigo = null;
+        try {
+            db = new DBUnidadePMAMHelper(ctx).getReadableDatabase(); // Use getReadableDatabase para leitura
+            String[] busca = new String[]{name};
+            c = db.query(table_name, new String[]{"_id"}, "nome = ?", busca, null, null, null, null);
+            if (c.moveToFirst()) {
+                codigo = c.getString(c.getColumnIndexOrThrow("_id"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            if (c != null) {
+                c.close();
+            }
+            if (db != null) {
+                db.close();
+            }
+        }
+        return codigo;
+    }
 }
