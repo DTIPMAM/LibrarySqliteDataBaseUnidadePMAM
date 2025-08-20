@@ -5,7 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
-
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,16 +16,21 @@ import br.com.msm.librarydatabaseunidadepmam.database.DBUnidadePMAMHelper;
 
 public class pessoas_lotacaoDAO {
     //MÉTODOS PAARA TRABALHAR COM A TABELA pessoas_lotacoes
-    private Context ctx;
-    private String table_name = "pessoas_lotacoes";
-    private String[] colunas = new String[]{
-            "_id", "id_unidade", "pessoa_nome","funcao",
+    private final Context ctx;
+    private final String table_name = "pessoas_lotacoes";
+    private final String[] colunas = new String[]{
+            "_id", "id_unidade", "pessoa_nome", "funcao",
             "telefone_corporativo"};
-
 
     public pessoas_lotacaoDAO(Context ctx) {
         this.ctx = ctx;
     }
+
+    private void LogD(Throwable line, String s) {
+        Log.d(getClass().getSimpleName() + " " + line.getStackTrace()[0].getLineNumber(), s);
+
+    }
+
     public boolean insert(pessoas_lotacaoVO pessoaLotacao) {
         SQLiteDatabase db = null;
         try {
@@ -40,9 +45,8 @@ public class pessoas_lotacaoDAO {
             if (db != null) {
                 db.close();
             }
-        }    }
-
-
+        }
+    }
 
 
     public Cursor buscarCodprod(String txtbusca) {
@@ -62,14 +66,9 @@ public class pessoas_lotacaoDAO {
         } catch (SQLException e) {
             // Log the error or handle it as needed
             return null; // ou lançar uma exceção personalizada
-        } finally {
-            // Não feche o cursor aqui se ele for retornado e usado externamente.
-            // O chamador será responsável por fechar o cursor.
-            // No entanto, o banco de dados pode ser fechado se não for mais necessário.
-            // Se o cursor estiver ligado a este db instance, não feche o db aqui também.
-            // A melhor prática é que o chamador do método gerencie o ciclo de vida do cursor e do db.
         }
     }
+
     public boolean hasDadosDatabase(String txtbusca) {
 
         SQLiteDatabase db = null;
@@ -171,8 +170,6 @@ public class pessoas_lotacaoDAO {
     }
 
 
-
-
     public boolean update(pessoas_lotacaoVO geo, String nomepessoa) {
         SQLiteDatabase db = null;
         String[] update = new String[]{nomepessoa};
@@ -192,6 +189,7 @@ public class pessoas_lotacaoDAO {
             }
         }
     }
+
     public boolean deletaTudo() {
         SQLiteDatabase db = null;
         try {
@@ -204,6 +202,7 @@ public class pessoas_lotacaoDAO {
         }
 
     }
+
     public int tamDb() {
         int total = 0;
         SQLiteDatabase db = null;
@@ -224,7 +223,7 @@ public class pessoas_lotacaoDAO {
                 db.close();
             }
         }
-            return total;
+        return total;
     }
 
     public pessoas_lotacaoVO lista(String id_unidade) {
@@ -237,7 +236,7 @@ public class pessoas_lotacaoDAO {
             db = new DBUnidadePMAMHelper(ctx).getWritableDatabase();
             c = db.query(table_name, colunas, "id_unidade = ?", busca, null, null, null);
 
-             if (!c.moveToFirst()) {
+            if (!c.moveToFirst()) {
                 return null;
             }
             geo = new pessoas_lotacaoVO();
@@ -259,7 +258,7 @@ public class pessoas_lotacaoDAO {
     }
 
 
-    public  List<pessoas_lotacaoVO> buscarPessoaIdOPM(String txtbusca) {
+    public List<pessoas_lotacaoVO> buscarPessoaIdOPM(String txtbusca) {
         SQLiteDatabase db = null;
         Cursor c = null;
         List<pessoas_lotacaoVO> lista = new ArrayList<pessoas_lotacaoVO>();
@@ -291,7 +290,6 @@ public class pessoas_lotacaoDAO {
     }
 
 
-
     public List<pessoas_lotacaoVO> lista() {
 
         List<pessoas_lotacaoVO> lista = new ArrayList<pessoas_lotacaoVO>();
@@ -310,7 +308,7 @@ public class pessoas_lotacaoDAO {
                 lista.add(geo);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LogD(new Throwable(), e.getMessage());
         } finally {
             if (c != null) {
                 c.close();
@@ -320,6 +318,70 @@ public class pessoas_lotacaoDAO {
             }
         }
         return lista;
+    }
+
+
+    public List<pessoas_lotacaoVO> VerificarSeTemUnidade_and_funcao(String id_unidade, String funcao) {
+
+        List<pessoas_lotacaoVO> lista = new ArrayList<pessoas_lotacaoVO>();
+        SQLiteDatabase db = null;
+        Cursor c = null;
+        try {
+            String[] busca = new String[]{id_unidade, funcao};
+            db = new DBUnidadePMAMHelper(ctx).getWritableDatabase();
+            c = db.query(table_name, colunas, "id_unidade = ? and funcao = ?", busca, null, null, null);
+            while (c.moveToNext()) {
+                pessoas_lotacaoVO geo = new pessoas_lotacaoVO();
+                geo.setId_unidade(c.getInt(c.getColumnIndexOrThrow("id_unidade")));
+                geo.setPessoa_nome(c.getString(c.getColumnIndexOrThrow("pessoa_nome")));
+                geo.setFuncao(c.getString(c.getColumnIndexOrThrow("funcao")));
+                geo.setTelefone_corporativo(c.getString(c.getColumnIndexOrThrow("telefone_corporativo")));
+                lista.add(geo);
+            }
+        } catch (Exception e) {
+            LogD(new Throwable(), e.getMessage());
+        } finally {
+            if (c != null) {
+                c.close();
+            }
+            if (db != null) {
+                db.close();
+            }
+        }
+        return lista;
+    }
+
+    public pessoas_lotacaoVO VerificarSeTemUnidade_pessoa(String Nome_Pessoa) {
+
+        pessoas_lotacaoVO pessoa = null;
+        SQLiteDatabase db = null;
+        Cursor c = null;
+        try {
+            String[] busca = new String[]{Nome_Pessoa};
+            db = new DBUnidadePMAMHelper(ctx).getWritableDatabase();
+            c = db.query(table_name, colunas, "pessoa_nome = ?", busca, null, null, null, null);
+
+            if (!c.moveToFirst()) {
+                return null;
+            }
+
+
+            pessoa = new pessoas_lotacaoVO();
+            pessoa.setId_unidade(c.getInt(c.getColumnIndexOrThrow("id_unidade")));
+            pessoa.setPessoa_nome(c.getString(c.getColumnIndexOrThrow("pessoa_nome")));
+            pessoa.setFuncao(c.getString(c.getColumnIndexOrThrow("funcao")));
+            pessoa.setTelefone_corporativo(c.getString(c.getColumnIndexOrThrow("telefone_corporativo")));
+        } catch (Exception e) {
+            LogD(new Throwable(), e.getMessage());
+        } finally {
+            if (c != null) {
+                c.close();
+            }
+            if (db != null) {
+                db.close();
+            }
+        }
+        return pessoa;
     }
 
 }
